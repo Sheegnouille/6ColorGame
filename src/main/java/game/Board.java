@@ -1,5 +1,7 @@
 package game;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,7 +61,7 @@ public class Board {
 
     // TODO
     public Cell getStartingCell() {
-        return null;
+        throw new NotImplementedException();
     }
 
 }

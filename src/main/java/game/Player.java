@@ -1,7 +1,5 @@
 package game;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Objects;
 
 public class Player {
@@ -12,10 +10,6 @@ public class Player {
     Player(String playerName, Cell startingCell) {
         this.name = playerName;
         this.startingCell = startingCell;
-    }
-
-    public Score getScore() {
-        throw new NotImplementedException();
     }
 
     Cell getStartingCell() {

@@ -1,21 +1,20 @@
-import game.Board;
-import game.Cell;
-import game.Game;
-import game.Player;
-import org.assertj.core.api.Assertions;
+import game.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
+
 import static game.Color.BLUE;
 import static game.Color.RED;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GameTest {
-@Mock
-private Board board;
+    @Mock
+    private Board board;
     private Game game;
     private Cell startingCell;
 
@@ -31,7 +30,7 @@ private Board board;
     public void should_add_starting_cell_to_player_when_add_new_player() {
         game.addPlayer("Toto");
 
-        Assertions.assertThat(game.getCurrentPlayerStartingCell()).isEqualTo(startingCell);
+        assertThat(game.getCurrentPlayerStartingCell()).isEqualTo(startingCell);
         verify(board).getStartingCell();
     }
 
@@ -48,7 +47,7 @@ private Board board;
     public void current_player_is_the_only_player() {
         game.addPlayer("Toto");
 
-        Assertions.assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
+        assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
     }
 
     @Test
@@ -56,7 +55,7 @@ private Board board;
         game.addPlayer("Toto");
         game.addPlayer("Titi");
 
-        Assertions.assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
+        assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
     }
 
     @Test
@@ -67,7 +66,7 @@ private Board board;
         game.currentPlayerChooseColor(RED);
 
         Player currentPlayer = game.getCurrentPlayer();
-        Assertions.assertThat(currentPlayer.hasName("Titi")).isTrue();
+        assertThat(currentPlayer.hasName("Titi")).isTrue();
     }
 
     @Test
@@ -77,6 +76,16 @@ private Board board;
         game.currentPlayerChooseColor(RED);
 
         Player currentPlayer = game.getCurrentPlayer();
-        Assertions.assertThat(currentPlayer.hasName("Toto")).isTrue();
+        assertThat(currentPlayer.hasName("Toto")).isTrue();
+    }
+
+    @Test
+    public void new_player_has_score_of_1() {
+        game.addPlayer("toto");
+        when(board.getContiguousColor(startingCell)).thenReturn(
+                Collections.singletonList(startingCell)
+        );
+        assertThat(game.getCurrentPlayerScore()).isEqualTo(Score.valueOf(1));
+        verify(board).getContiguousColor(startingCell);
     }
 }

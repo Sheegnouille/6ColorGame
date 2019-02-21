@@ -24,12 +24,18 @@ public class Game {
         currentPlayerIndex++;
     }
 
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex % players.size());
+    }
+
     public Cell getCurrentPlayerStartingCell() {
         Player currentPlayer = getCurrentPlayer();
         return currentPlayer.getStartingCell();
     }
 
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex % players.size());
+    public Score getCurrentPlayerScore() {
+        Player currentPlayer = getCurrentPlayer();
+        List<Cell> currentPlayerCells = board.getContiguousColor(currentPlayer.getStartingCell());
+        return Score.valueOf(currentPlayerCells.size());
     }
 }

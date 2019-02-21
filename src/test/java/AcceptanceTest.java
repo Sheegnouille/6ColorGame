@@ -1,5 +1,4 @@
 import game.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static game.Color.BLUE;
@@ -8,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptanceTest {
 
-    @Ignore
     @Test
     public void should_() {
         // ARRANGE
@@ -24,6 +22,6 @@ public class AcceptanceTest {
         game.currentPlayerChooseColor(RED);
 
         // ASSERT
-        assertThat(game.getCurrentPlayer().getScore()).isEqualTo(Score.valueOf(9));
+        assertThat(game.getCurrentPlayerScore()).isEqualTo(Score.valueOf(9));
     }
 }
