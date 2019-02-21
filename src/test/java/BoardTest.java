@@ -3,8 +3,6 @@ import game.Cell;
 import game.ColorGeneratorFake;
 import org.junit.Test;
 
-import java.util.List;
-
 import static game.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -72,9 +70,8 @@ public class BoardTest {
     public void player_starts_as_blue_and_choose_red_should_have_all_cells() {
         Board board = new Board(2,2, new ColorGeneratorFake(BLUE, BLUE, BLUE, RED));
         Cell topLeftBlue = new Cell(0, 0, BLUE);
-        List<Cell> cellsToChange = board.getContiguousColor(topLeftBlue);
 
-        board.changeColor(cellsToChange, RED);
+        board.changeColor(topLeftBlue, RED);
 
         Cell topLeft = new Cell(0,0, RED);
         Cell topRight= new Cell(1,0, RED);
@@ -90,28 +87,22 @@ public class BoardTest {
         Board board = new Board(4,4, new ColorGeneratorFake(RED, BLUE, GREEN));
         Cell topLeft = new Cell(0, 0, RED);
 
-        List<Cell> cellsToChange = board.getContiguousColor(topLeft);
-        board.changeColor(cellsToChange, BLUE);
+        board.changeColor(topLeft, BLUE);
         topLeft.changeColor(BLUE);
 
-        cellsToChange = board.getContiguousColor(topLeft);
-        board.changeColor(cellsToChange, GREEN);
+        board.changeColor(topLeft, GREEN);
         topLeft.changeColor(GREEN);
 
-        cellsToChange = board.getContiguousColor(topLeft);
-        board.changeColor(cellsToChange, RED);
+        board.changeColor(topLeft, RED);
         topLeft.changeColor(RED);
 
-        cellsToChange = board.getContiguousColor(topLeft);
-        board.changeColor(cellsToChange, BLUE);
+        board.changeColor(topLeft, BLUE);
         topLeft.changeColor(BLUE);
 
-        cellsToChange = board.getContiguousColor(topLeft);
-        board.changeColor(cellsToChange, GREEN);
+        board.changeColor(topLeft, GREEN);
         topLeft.changeColor(GREEN);
 
-        cellsToChange = board.getContiguousColor(topLeft);
-        board.changeColor(cellsToChange, RED);
+        board.changeColor(topLeft, RED);
         topLeft.changeColor(RED);
 
         assertThat(board.getContiguousColor(topLeft).size()).isEqualTo(16);
@@ -129,12 +120,10 @@ public class BoardTest {
 
         Cell center = new Cell(2,2, RED);
 
-        List<Cell> cellsToChange = board.getContiguousColor(center);
-        board.changeColor(cellsToChange, BLUE);
+        board.changeColor(center, BLUE);
         center.changeColor(BLUE);
 
-        cellsToChange = board.getContiguousColor(center);
-        board.changeColor(cellsToChange, RED);
+        board.changeColor(center, RED);
         center.changeColor(RED);
 
         assertThat(board.getContiguousColor(center).size()).isEqualTo(25);

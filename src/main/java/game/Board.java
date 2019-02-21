@@ -49,18 +49,10 @@ public class Board {
                 .collect(Collectors.toList());
     }
 
-    @Deprecated
-    public void changeColor(List<Cell> cellsToChange, Color color) {
+    public void changeColor(Cell cellToChange, Color color) {
+        List<Cell> cellsToChange = getContiguousColor(cellToChange);
         for (Cell cell : cells) {
             if (cellsToChange.contains(cell))
-                cell.changeColor(color);
-        }
-    }
-
-    public void changeColor(Cell cellToChange, Color color) {
-        List<Cell> cells = getContiguousColor(cellToChange);
-        for (Cell cell : cells) {
-            if (cells.contains(cell))
                 cell.changeColor(color);
         }
     }

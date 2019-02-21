@@ -20,7 +20,7 @@ private Board board;
     private Cell startingCell;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         game = new Game(board);
         startingCell = new Cell(0, 0, RED);
