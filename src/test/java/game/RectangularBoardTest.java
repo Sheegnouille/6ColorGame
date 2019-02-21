@@ -201,4 +201,17 @@ public class RectangularBoardTest {
         boolean isTerritoryDominant = board.isTerritoryDominant(cell);
         assertThat(isTerritoryDominant).isTrue();
     }
+
+    @Test
+    public void successive_calls_to_provideFreeStartingCell_should_return_different_cells() {
+        Board board = aRectangularBoard()
+                .withHeight(2)
+                .withWidth(2)
+                .withColorGenerator(new ColorGeneratorFake(RED))
+                .build();
+        Cell firstCell = board.provideFreeStartingCell();
+        Cell secondCell = board.provideFreeStartingCell();
+
+        assertThat(firstCell).isNotEqualTo(secondCell);
+    }
 }

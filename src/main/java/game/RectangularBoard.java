@@ -7,11 +7,14 @@ public class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
     private final int halfBoardSize;
+    private final List<Cell> possibleStartingCells = new ArrayList<>();
 
     private RectangularBoard(int width, int height, ColorGenerator colorGenerator) {
         for (int row = 0; row < height; row++) {
             for (int column = 0; column < width; column++) {
-                cells.add(new Cell(new Position(column, row), colorGenerator.getRandomColor()));
+                Cell cellToAdd = new Cell(new Position(column, row), colorGenerator.getRandomColor());
+                cells.add(cellToAdd);
+                possibleStartingCells.add(cellToAdd);
             }
         }
         halfBoardSize = cells.size() / 2;
@@ -28,7 +31,8 @@ public class RectangularBoard implements Board {
 
     @Override
     public Cell provideFreeStartingCell() {
-        return cells.get(0);
+        return possibleStartingCells.remove(new Random().nextInt(possibleStartingCells.size()));
+//        return cells.get(0);
     }
 
     @Override
