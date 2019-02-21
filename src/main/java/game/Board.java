@@ -56,5 +56,8 @@ public class Board {
         }
     }
 
+    public Cell getStartingCell() {
+        return null;
+    }
 
 }
