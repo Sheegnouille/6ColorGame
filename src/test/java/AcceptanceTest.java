@@ -1,4 +1,5 @@
 import game.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static game.Color.BLUE;
@@ -7,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptanceTest {
 
+    @Ignore
     @Test
     public void should_() {
         // ARRANGE

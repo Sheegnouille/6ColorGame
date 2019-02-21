@@ -1,8 +1,6 @@
 package game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Game {
@@ -19,6 +17,8 @@ public class Game {
     }
 
     public void currentPlayerChooseColor(Color color) {
+        Cell playerCell = players.entrySet().iterator().next().getValue();
+        board.changeColor(playerCell, color);
     }
 
     public Cell getStartingCell(Player player) {

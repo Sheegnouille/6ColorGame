@@ -118,7 +118,7 @@ public class BoardTest {
     }
 
     @Test
-    public void name() {
+    public void color_propagates_from_center() {
         Board board = new Board(5,5, new ColorGeneratorFake(
                 RED, RED, RED, RED, RED,
                 RED, BLUE, BLUE, BLUE, RED,
