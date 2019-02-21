@@ -1,10 +1,9 @@
-import game.*;
+package game;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.Collections;
 
 import static game.Color.BLUE;
 import static game.Color.RED;
@@ -23,7 +22,7 @@ public class GameTest {
         MockitoAnnotations.initMocks(this);
         game = new Game(board);
         startingCell = new Cell(0, 0, RED);
-        when(board.getStartingCell()).thenReturn(startingCell);
+        when(board.provideFreeStartingCell()).thenReturn(startingCell);
     }
 
     @Test
@@ -31,7 +30,7 @@ public class GameTest {
         game.addPlayer("Toto");
 
         assertThat(game.getCurrentPlayerStartingCell()).isEqualTo(startingCell);
-        verify(board).getStartingCell();
+        verify(board).provideFreeStartingCell();
     }
 
     @Test
@@ -82,10 +81,11 @@ public class GameTest {
     @Test
     public void new_player_has_score_of_1() {
         game.addPlayer("toto");
-        when(board.getContiguousColor(startingCell)).thenReturn(
-                Collections.singletonList(startingCell)
-        );
-        assertThat(game.getCurrentPlayerScore()).isEqualTo(Score.valueOf(1));
-        verify(board).getContiguousColor(startingCell);
+        when(board.determineTerritorySizeFromCell(startingCell)).thenReturn(1);
+
+        Score currentPlayerScore = game.calculateCurrentPlayerScore();
+
+        assertThat(currentPlayerScore).isEqualTo(Score.valueOf(1));
+        verify(board).determineTerritorySizeFromCell(startingCell);
     }
 }

@@ -14,7 +14,7 @@ public class AcceptanceTest {
                 BLUE, RED, RED,
                 RED, RED, RED,
                 RED, RED, RED);
-        Board board = new Board(3, 3, colorGenerator);
+        Board board = new RectangularBoard(3, 3, colorGenerator);
         Game game = new Game(board);
         game.addPlayer("1");
 
@@ -22,6 +22,6 @@ public class AcceptanceTest {
         game.currentPlayerChooseColor(RED);
 
         // ASSERT
-        assertThat(game.getCurrentPlayerScore()).isEqualTo(Score.valueOf(9));
+        assertThat(game.isFinished()).isTrue();
     }
 }

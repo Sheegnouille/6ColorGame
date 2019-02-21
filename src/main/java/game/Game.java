@@ -1,12 +1,14 @@
 package game;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
 
     private final Board board;
-    private List<Player> players = new ArrayList<>();
+    private final List<Player> players = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
     public Game(Board board) {
@@ -14,28 +16,36 @@ public class Game {
     }
 
     public void addPlayer(String playerName) {
-        Cell startingCell = board.getStartingCell();
+        Cell startingCell = board.provideFreeStartingCell();
         Player player = new Player(playerName, startingCell);
         players.add(player);
     }
 
     public void currentPlayerChooseColor(Color color) {
         board.changeColor(getCurrentPlayerStartingCell(), color);
-        currentPlayerIndex++;
+        nextPlayer();
     }
 
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex % players.size());
+    public boolean isFinished() {
+        throw new NotImplementedException();
     }
 
-    public Cell getCurrentPlayerStartingCell() {
+    private void nextPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    }
+
+    Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+    Cell getCurrentPlayerStartingCell() {
         Player currentPlayer = getCurrentPlayer();
         return currentPlayer.getStartingCell();
     }
 
-    public Score getCurrentPlayerScore() {
+    Score calculateCurrentPlayerScore() {
         Player currentPlayer = getCurrentPlayer();
-        List<Cell> currentPlayerCells = board.getContiguousColor(currentPlayer.getStartingCell());
-        return Score.valueOf(currentPlayerCells.size());
+        Cell startingCell = currentPlayer.getStartingCell();
+        return Score.valueOf(board.determineTerritorySizeFromCell(startingCell));
     }
 }

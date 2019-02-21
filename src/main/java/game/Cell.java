@@ -8,7 +8,7 @@ public class Cell {
     private final int col;
     private Color color;
 
-    public Cell(int col, int row, Color color) {
+    Cell(int col, int row, Color color) {
         this.row = row;
         this.col = col;
         this.color = color;
@@ -18,7 +18,7 @@ public class Cell {
         return this.color.equals(otherCell.color);
     }
 
-    public void changeColor(Color color) {
+    void changeColor(Color color) {
         this.color = color;
     }
 
@@ -28,6 +28,26 @@ public class Cell {
         }
         return isUnder(otherCell) || isAbove(otherCell) ||
                 isRight(otherCell) || isLeft(otherCell);
+    }
+
+    private boolean isDiagonal(Cell otherCell) {
+        return otherCell.row != row && otherCell.col != col;
+    }
+
+    private boolean isLeft(Cell otherCell) {
+        return col - 1 == otherCell.col;
+    }
+
+    private boolean isRight(Cell otherCell) {
+        return col + 1 == otherCell.col;
+    }
+
+    private boolean isAbove(Cell otherCell) {
+        return row - 1 == otherCell.row;
+    }
+
+    private boolean isUnder(Cell otherCell) {
+        return row + 1 == otherCell.row;
     }
 
     @Override
@@ -50,25 +70,5 @@ public class Cell {
         return "row=" + row +
                 ", col=" + col +
                 ", color=" + color ;
-    }
-
-    private boolean isDiagonal(Cell otherCell) {
-        return otherCell.row != row && otherCell.col != col;
-    }
-
-    private boolean isLeft(Cell otherCell) {
-        return col - 1 == otherCell.col;
-    }
-
-    private boolean isRight(Cell otherCell) {
-        return col + 1 == otherCell.col;
-    }
-
-    private boolean isAbove(Cell otherCell) {
-        return row - 1 == otherCell.row;
-    }
-
-    private boolean isUnder(Cell otherCell) {
-        return row + 1 == otherCell.row;
     }
 }

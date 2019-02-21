@@ -2,7 +2,7 @@ package game;
 
 import java.util.Objects;
 
-public class Player {
+public final class Player {
 
     private final String name;
     private final Cell startingCell;
@@ -16,7 +16,7 @@ public class Player {
         return startingCell;
     }
 
-    public boolean hasName(String name) {
+    boolean hasName(String name) {
         return name.equals(this.name);
     }
 

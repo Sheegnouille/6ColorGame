@@ -2,7 +2,7 @@ package game;
 
 import java.util.Objects;
 
-public class Score {
+public final class Score {
 
     private final int score;
 
@@ -10,7 +10,7 @@ public class Score {
         this.score = score;
     }
 
-    public static Score valueOf(int score) {
+    static Score valueOf(int score) {
         return new Score(score);
     }
 
