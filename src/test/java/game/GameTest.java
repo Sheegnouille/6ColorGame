@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 
 import static game.Color.BLUE;
 import static game.Color.RED;
+import static game.Position.PositionBuilder.aPosition;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,7 +22,7 @@ public class GameTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         game = new Game(board);
-        startingCell = new Cell(new Position(0, 0), RED);
+        startingCell = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
         when(board.provideFreeStartingCell()).thenReturn(startingCell);
     }
 

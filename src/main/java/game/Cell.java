@@ -29,24 +29,24 @@ public class Cell {
     }
 
     @Override
+    public String toString() {
+        return "Cell{" +
+                "\nposition=" + position +
+                ", \ncolor=" + color +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
-        return position.row == cell.position.row &&
-                position.col == cell.position.col &&
+        return Objects.equals(position, cell.position) &&
                 color == cell.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position.row, position.col, color);
-    }
-
-    @Override
-    public String toString() {
-        return "row=" + position.row +
-                ", col=" + position.col +
-                ", color=" + color ;
+        return Objects.hash(position, color);
     }
 }

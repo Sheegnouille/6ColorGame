@@ -3,61 +3,83 @@ package game;
 import org.junit.Test;
 
 import static game.Color.*;
+import static game.Position.PositionBuilder.aPosition;
+import static game.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RectangularBoardTest {
 
     @Test
     public void all_cells_are_contiguous_and_same_color() {
-        RectangularBoard board = new RectangularBoard(1, 2, new ColorGeneratorFake(BLUE, BLUE));
-        Cell cell1 = new Cell(new Position(0, 0), BLUE);
-        Cell cell2 = new Cell(new Position(0, 1), BLUE);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(1)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(BLUE, BLUE))
+                .build();
+        Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
+        Cell cell2 = new Cell(aPosition().withColumn(0).withRow(1).build(), BLUE);
         assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1, cell2);
     }
 
     @Test
     public void both_cells_have_different_colors_therefore_not_contiguous() {
-        RectangularBoard board = new RectangularBoard(1, 2, new ColorGeneratorFake(BLUE, RED));
-        Cell cell1 = new Cell(new Position(0, 0), BLUE);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(1)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(BLUE, RED))
+                .build();
+        Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
         assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1);
     }
 
     @Test
     public void a_cell_with_same_color_is_not_contiguous() {
-        RectangularBoard board = new RectangularBoard(1, 3, new ColorGeneratorFake(BLUE, RED, BLUE));
-        Cell cell1 = new Cell(new Position(0, 0), BLUE);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(1)
+                .withHeight(3)
+                .withColorGenerator(new ColorGeneratorFake(BLUE, RED, BLUE))
+                .build();
+        Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
         assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1);
     }
 
     @Test
     public void all_cells_have_same_color_therefore_are_contiguous() {
-        RectangularBoard board = new RectangularBoard(1, 3, new ColorGeneratorFake(BLUE));
-        Cell cell1 = new Cell(new Position(0, 0), BLUE);
-        Cell cell2 = new Cell(new Position(0, 1), BLUE);
-        Cell cell3 = new Cell(new Position(0, 2), BLUE);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(1)
+                .withHeight(3)
+                .withColorGenerator(new ColorGeneratorFake(BLUE))
+                .build();
+        Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
+        Cell cell2 = new Cell(aPosition().withColumn(0).withRow(1).build(), BLUE);
+        Cell cell3 = new Cell(aPosition().withColumn(0).withRow(2).build(), BLUE);
         assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1, cell2, cell3);
     }
 
     @Test
     public void given_complex_red_and_blue_board_should_give_adjacent_cells() {
-        RectangularBoard board = new RectangularBoard(5, 5, new ColorGeneratorFake(
-                BLUE, BLUE, BLUE, RED, BLUE,
-                BLUE, RED, BLUE, BLUE, RED,
-                BLUE, RED, RED, BLUE, RED,
-                BLUE, BLUE, BLUE, RED, RED,
-                RED, RED, BLUE, RED, BLUE));
-        Cell cell1 = new Cell(new Position(0, 0), BLUE);
-        Cell cell2 = new Cell(new Position(1, 0), BLUE);
-        Cell cell3 = new Cell(new Position(2, 0), BLUE);
-        Cell cell4 = new Cell(new Position(0, 1), BLUE);
-        Cell cell5 = new Cell(new Position(2, 1), BLUE);
-        Cell cell6 = new Cell(new Position(3, 1), BLUE);
-        Cell cell7 = new Cell(new Position(0, 2), BLUE);
-        Cell cell8 = new Cell(new Position(3, 2), BLUE);
-        Cell cell9 = new Cell(new Position(0, 3), BLUE);
-        Cell cell10 = new Cell(new Position(1, 3), BLUE);
-        Cell cell11 = new Cell(new Position(2, 3), BLUE);
-        Cell cell12 = new Cell(new Position(2, 4), BLUE);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(5)
+                .withHeight(5)
+                .withColorGenerator(new ColorGeneratorFake(
+                        BLUE, BLUE, BLUE, RED, BLUE,
+                        BLUE, RED, BLUE, BLUE, RED,
+                        BLUE, RED, RED, BLUE, RED,
+                        BLUE, BLUE, BLUE, RED, RED,
+                        RED, RED, BLUE, RED, BLUE))
+                .build();
+        Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
+        Cell cell2 = new Cell(aPosition().withColumn(1).withRow(0).build(), BLUE);
+        Cell cell3 = new Cell(aPosition().withColumn(2).withRow(0).build(), BLUE);
+        Cell cell4 = new Cell(aPosition().withColumn(0).withRow(1).build(), BLUE);
+        Cell cell5 = new Cell(aPosition().withColumn(2).withRow(1).build(), BLUE);
+        Cell cell6 = new Cell(aPosition().withColumn(3).withRow(1).build(), BLUE);
+        Cell cell7 = new Cell(aPosition().withColumn(0).withRow(2).build(), BLUE);
+        Cell cell8 = new Cell(aPosition().withColumn(3).withRow(2).build(), BLUE);
+        Cell cell9 = new Cell(aPosition().withColumn(0).withRow(3).build(), BLUE);
+        Cell cell10 = new Cell(aPosition().withColumn(1).withRow(3).build(), BLUE);
+        Cell cell11 = new Cell(aPosition().withColumn(2).withRow(3).build(), BLUE);
+        Cell cell12 = new Cell(aPosition().withColumn(2).withRow(4).build(), BLUE);
         assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(
                 cell1, cell2, cell3,
                 cell4, cell5, cell6,
@@ -67,15 +89,19 @@ public class RectangularBoardTest {
 
     @Test
     public void player_starts_as_blue_and_choose_red_should_have_all_cells() {
-        RectangularBoard board = new RectangularBoard(2, 2, new ColorGeneratorFake(BLUE, BLUE, BLUE, RED));
-        Cell topLeftBlue = new Cell(new Position(0, 0), BLUE);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(2)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(BLUE, BLUE, BLUE, RED))
+                .build();
+        Cell topLeftBlue = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
 
         board.changeColor(topLeftBlue, RED);
 
-        Cell topLeft = new Cell(new Position(0, 0), RED);
-        Cell topRight = new Cell(new Position(1, 0), RED);
-        Cell bottomLeft = new Cell(new Position(0, 1), RED);
-        Cell bottomRight = new Cell(new Position(1, 1), RED);
+        Cell topLeft = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
+        Cell topRight = new Cell(aPosition().withColumn(1).withRow(0).build(), RED);
+        Cell bottomLeft = new Cell(aPosition().withColumn(0).withRow(1).build(), RED);
+        Cell bottomRight = new Cell(aPosition().withColumn(1).withRow(1).build(), RED);
         assertThat(board.determineContiguousColor(topLeft)).containsExactlyInAnyOrder(
                 topLeft, topRight,
                 bottomLeft, bottomRight);
@@ -83,8 +109,12 @@ public class RectangularBoardTest {
 
     @Test
     public void change_all_cell_to_red() {
-        RectangularBoard board = new RectangularBoard(4, 4, new ColorGeneratorFake(RED, BLUE, GREEN));
-        Cell topLeft = new Cell(new Position(0, 0), RED);
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(4)
+                .withHeight(4)
+                .withColorGenerator(new ColorGeneratorFake(RED, BLUE, GREEN))
+                .build();
+        Cell topLeft = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
 
         board.changeColor(topLeft, BLUE);
         topLeft.changeColor(BLUE);
@@ -109,15 +139,19 @@ public class RectangularBoardTest {
 
     @Test
     public void color_propagates_from_center() {
-        RectangularBoard board = new RectangularBoard(5, 5, new ColorGeneratorFake(
-                RED, RED, RED, RED, RED,
-                RED, BLUE, BLUE, BLUE, RED,
-                RED, BLUE, RED, BLUE, RED,
-                RED, BLUE, BLUE, BLUE, RED,
-                RED, RED, RED, RED, RED
-                ));
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(5)
+                .withHeight(5)
+                .withColorGenerator(new ColorGeneratorFake(
+                        RED, RED, RED, RED, RED,
+                        RED, BLUE, BLUE, BLUE, RED,
+                        RED, BLUE, RED, BLUE, RED,
+                        RED, BLUE, BLUE, BLUE, RED,
+                        RED, RED, RED, RED, RED
+                ))
+                .build();
 
-        Cell center = new Cell(new Position(2, 2), RED);
+        Cell center = new Cell(aPosition().withColumn(2).withRow(2).build(), RED);
 
         board.changeColor(center, BLUE);
         center.changeColor(BLUE);
@@ -130,8 +164,12 @@ public class RectangularBoardTest {
 
     @Test
     public void first_free_starting_cell_is_0_0() {
-        Cell startingCell = new Cell(new Position(0, 0), RED);
-        Board board = new RectangularBoard(1, 1, new ColorGeneratorFake(RED));
+        Cell startingCell = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
+        Board board = aRectangularBoard()
+                .withWidth(1)
+                .withHeight(1)
+                .withColorGenerator(new ColorGeneratorFake(RED))
+                .build();
 
         Cell cell = board.provideFreeStartingCell();
 
@@ -140,18 +178,26 @@ public class RectangularBoardTest {
 
     @Test
     public void single_cell_on_checker_pattern_board_should_not_be_dominant() {
-        Board board = new RectangularBoard(2, 2, new ColorGeneratorFake(
-                BLUE, RED,
-                RED, BLUE));
-        Cell cell = new Cell(new Position(0, 0), BLUE);
+        Board board = aRectangularBoard()
+                .withWidth(2)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(
+                        BLUE, RED,
+                        RED, BLUE))
+                .build();
+        Cell cell = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
         boolean isTerritoryDominant = board.isTerritoryDominant(cell);
         assertThat(isTerritoryDominant).isFalse();
     }
 
     @Test
-    public void name() {
-        Board board = new RectangularBoard(2, 2, new ColorGeneratorFake(BLUE));
-        Cell cell = new Cell(new Position(0, 0), BLUE);
+    public void one_color_board_should_have_dominant_territory() {
+        Board board = aRectangularBoard()
+                .withWidth(2)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(BLUE))
+                .build();
+        Cell cell = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
         boolean isTerritoryDominant = board.isTerritoryDominant(cell);
         assertThat(isTerritoryDominant).isTrue();
     }

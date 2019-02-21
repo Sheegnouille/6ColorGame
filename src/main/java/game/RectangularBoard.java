@@ -8,7 +8,7 @@ public class RectangularBoard implements Board {
     private final List<Cell> cells = new ArrayList<>();
     private final int halfBoardSize;
 
-    public RectangularBoard(int width, int height, ColorGenerator colorGenerator) {
+    private RectangularBoard(int width, int height, ColorGenerator colorGenerator) {
         for (int row = 0; row < height; row++) {
             for (int column = 0; column < width; column++) {
                 cells.add(new Cell(new Position(column, row), colorGenerator.getRandomColor()));
@@ -70,5 +70,37 @@ public class RectangularBoard implements Board {
                 .filter(cell::isSameColor)
                 .filter(cell::isAdjacentTo)
                 .collect(Collectors.toList());
+    }
+
+    public static final class RectangularBoardBuilder {
+        private int width;
+        private int height;
+        private ColorGenerator colorGenerator;
+
+        private RectangularBoardBuilder() {
+        }
+
+        public static RectangularBoardBuilder aRectangularBoard() {
+            return new RectangularBoardBuilder();
+        }
+
+        public RectangularBoardBuilder withWidth(int width) {
+            this.width = width;
+            return this;
+        }
+
+        public RectangularBoardBuilder withHeight(int height) {
+            this.height = height;
+            return this;
+        }
+
+        public RectangularBoardBuilder withColorGenerator(ColorGenerator colorGenerator) {
+            this.colorGenerator = colorGenerator;
+            return this;
+        }
+
+        public RectangularBoard build() {
+            return new RectangularBoard(width, height, colorGenerator);
+        }
     }
 }
