@@ -137,4 +137,14 @@ public class RectangularBoardTest {
 
         assertThat(cell).isEqualTo(startingCell);
     }
+
+    @Test
+    public void single_cell_on_checker_pattern_board_should_not_be_dominant() {
+        Board board = new RectangularBoard(2, 2, new ColorGeneratorFake(
+                BLUE, RED,
+                RED, BLUE));
+        Cell cell = new Cell(0, 0, BLUE);
+        boolean isTerritoryDominant = board.isTerritoryDominant(cell);
+        assertThat(isTerritoryDominant).isFalse();
+    }
 }

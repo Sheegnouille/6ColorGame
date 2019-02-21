@@ -1,7 +1,5 @@
 package game;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +37,7 @@ public class RectangularBoard implements Board {
 
     @Override
     public boolean isTerritoryDominant(Cell cell) {
-        throw new NotImplementedException();
+        return false;
     }
 
     List<Cell> determineContiguousColor(Cell cell) {
