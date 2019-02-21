@@ -9,8 +9,7 @@ import static game.Color.BLUE;
 import static game.Color.RED;
 import static game.Position.PositionBuilder.aPosition;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class GameTest {
     @Mock
@@ -110,5 +109,19 @@ public class GameTest {
 
         assertThat(finished).isFalse();
         verify(board).isTerritoryDominant(startingCell);
+    }
+
+    @Test
+    public void two_players_should_have_different_starting_cells() {
+        game.addPlayer("Toto");
+        when(board.provideFreeStartingCell()).thenReturn(new Cell(aPosition().withColumn(1).withRow(0).build(), RED));
+        game.addPlayer("Tata");
+
+        Cell startingCellPlayer1 = game.getCurrentPlayerStartingCell();
+        game.currentPlayerChooseColor(RED);
+        Cell startingCellPlayer2 = game.getCurrentPlayerStartingCell();
+
+        assertThat(startingCellPlayer1).isNotEqualTo(startingCellPlayer2);
+        verify(board, times(2)).provideFreeStartingCell();
     }
 }
