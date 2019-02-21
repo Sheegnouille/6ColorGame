@@ -88,4 +88,26 @@ public class GameTest {
         assertThat(currentPlayerScore).isEqualTo(Score.valueOf(1));
         verify(board).determineTerritorySizeFromCell(startingCell);
     }
+
+    @Test
+    public void territory_dominant_should_finish_game() {
+        game.addPlayer("toto");
+        when(board.isTerritoryDominant(startingCell)).thenReturn(true);
+
+        boolean finished = game.isFinished();
+
+        assertThat(finished).isTrue();
+        verify(board).isTerritoryDominant(startingCell);
+    }
+
+    @Test
+    public void territory_not_dominant_should_not_finish_game() {
+        game.addPlayer("toto");
+        when(board.isTerritoryDominant(startingCell)).thenReturn(false);
+
+        boolean finished = game.isFinished();
+
+        assertThat(finished).isFalse();
+        verify(board).isTerritoryDominant(startingCell);
+    }
 }

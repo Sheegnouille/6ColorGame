@@ -28,13 +28,18 @@ public class RectangularBoard implements Board {
 
     @Override
     public Cell provideFreeStartingCell() {
-        throw new NotImplementedException();
+        return cells.get(0);
     }
 
     @Override
     public int determineTerritorySizeFromCell(Cell cell) {
         List<Cell> territory = determineContiguousColor(cell);
         return territory.size();
+    }
+
+    @Override
+    public boolean isTerritoryDominant(Cell cell) {
+        throw new NotImplementedException();
     }
 
     List<Cell> determineContiguousColor(Cell cell) {

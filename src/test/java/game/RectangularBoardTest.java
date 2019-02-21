@@ -5,7 +5,7 @@ import org.junit.Test;
 import static game.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BoardTest {
+public class RectangularBoardTest {
 
     @Test
     public void all_cells_are_contiguous_and_same_color() {
@@ -126,5 +126,15 @@ public class BoardTest {
         center.changeColor(RED);
 
         assertThat(board.determineContiguousColor(center).size()).isEqualTo(25);
+    }
+
+    @Test
+    public void first_free_starting_cell_is_0_0() {
+        Cell startingCell = new Cell(0, 0, RED);
+        Board board = new RectangularBoard(1, 1, new ColorGeneratorFake(RED));
+
+        Cell cell = board.provideFreeStartingCell();
+
+        assertThat(cell).isEqualTo(startingCell);
     }
 }

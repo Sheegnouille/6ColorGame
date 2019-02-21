@@ -6,4 +6,6 @@ public interface Board {
     Cell provideFreeStartingCell();
 
     int determineTerritorySizeFromCell(Cell cell);
+
+    boolean isTerritoryDominant(Cell cell);
 }

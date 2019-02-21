@@ -1,7 +1,5 @@
 package game;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class Game {
     }
 
     public boolean isFinished() {
-        throw new NotImplementedException();
+        return board.isTerritoryDominant(getCurrentPlayerStartingCell());
     }
 
     private void nextPlayer() {
