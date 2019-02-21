@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
+    private final int halfBoardSize;
 
     public RectangularBoard(int width, int height, ColorGenerator colorGenerator) {
         for (int row = 0; row < height; row++) {
@@ -13,6 +14,7 @@ public class RectangularBoard implements Board {
                 cells.add(new Cell(column, row, colorGenerator.getRandomColor()));
             }
         }
+        halfBoardSize = cells.size() / 2;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class RectangularBoard implements Board {
 
     @Override
     public boolean isTerritoryDominant(Cell cell) {
-        return false;
+        return determineTerritorySizeFromCell(cell) > halfBoardSize;
     }
 
     List<Cell> determineContiguousColor(Cell cell) {

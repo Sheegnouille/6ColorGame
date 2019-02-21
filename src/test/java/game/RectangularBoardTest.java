@@ -147,4 +147,12 @@ public class RectangularBoardTest {
         boolean isTerritoryDominant = board.isTerritoryDominant(cell);
         assertThat(isTerritoryDominant).isFalse();
     }
+
+    @Test
+    public void name() {
+        Board board = new RectangularBoard(2, 2, new ColorGeneratorFake(BLUE));
+        Cell cell = new Cell(0, 0, BLUE);
+        boolean isTerritoryDominant = board.isTerritoryDominant(cell);
+        assertThat(isTerritoryDominant).isTrue();
+    }
 }
