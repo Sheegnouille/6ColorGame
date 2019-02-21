@@ -66,4 +66,27 @@ private Board board;
         Assertions.assertThat(game.getCurrentPlayer()).isEqualTo(toto);
     }
 
+    @Test
+    public void current_player_changes_when_player_chooses_a_color() {
+        Player toto = new Player("Toto", board.getStartingCell());
+        Player titi = new Player("Titi", board.getStartingCell());
+        game.add(toto);
+        game.add(titi);
+
+        game.currentPlayerChooseColor(RED);
+
+        Player currentPlayer = game.getCurrentPlayer();
+        Assertions.assertThat(currentPlayer).isEqualTo(titi);
+    }
+
+    @Test
+    public void when_all_players_played_current_player_loops() {
+        Player toto = new Player("Toto", board.getStartingCell());
+        game.add(toto);
+
+        game.currentPlayerChooseColor(RED);
+
+        Player currentPlayer = game.getCurrentPlayer();
+        Assertions.assertThat(currentPlayer).isEqualTo(toto);
+    }
 }
