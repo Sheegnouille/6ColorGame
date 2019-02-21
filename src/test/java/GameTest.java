@@ -45,4 +45,25 @@ private Board board;
 
         verify(board).changeColor(startingCell, BLUE);
     }
+
+    @Test
+    public void current_player_is_the_only_player() {
+        Player toto = new Player("Toto");
+
+        game.add(toto);
+
+        Assertions.assertThat(game.getCurrentPlayer()).isEqualTo(toto);
+    }
+
+    @Test
+    public void current_player_is_first_player_added() {
+        Player toto = new Player("Toto");
+        Player titi = new Player("Titi");
+
+        game.add(toto);
+        game.add(titi);
+
+        Assertions.assertThat(game.getCurrentPlayer()).isEqualTo(toto);
+    }
+
 }
