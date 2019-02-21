@@ -6,15 +6,11 @@ import java.util.Objects;
 
 public class Player {
 
-    private final String playerName;
+    private final String name;
     private final Cell startingCell;
 
-    public Player(String playerName) {
-        this(playerName, null);
-    }
-
-    public Player(String playerName, Cell startingCell) {
-        this.playerName = playerName;
+    Player(String playerName, Cell startingCell) {
+        this.name = playerName;
         this.startingCell = startingCell;
     }
 
@@ -22,22 +18,31 @@ public class Player {
         throw new NotImplementedException();
     }
 
+    Cell getStartingCell() {
+        return startingCell;
+    }
+
+    public boolean hasName(String name) {
+        return name.equals(this.name);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return Objects.equals(playerName, player.playerName) &&
+        return Objects.equals(name, player.name) &&
                 Objects.equals(startingCell, player.startingCell);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerName, startingCell);
+        return Objects.hash(name, startingCell);
     }
 
     @Override
     public String toString() {
-        return "Player " + playerName;
+        return "Player name: " + name +
+                ", \nstarting cell: " + startingCell;
     }
 }

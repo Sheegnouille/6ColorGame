@@ -18,6 +18,18 @@ public class Cell {
         return this.color.equals(otherCell.color);
     }
 
+    public void changeColor(Color color) {
+        this.color = color;
+    }
+
+    boolean isAdjacentTo(Cell otherCell) {
+        if (isDiagonal(otherCell)) {
+            return false;
+        }
+        return isUnder(otherCell) || isAbove(otherCell) ||
+                isRight(otherCell) || isLeft(otherCell);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,14 +52,6 @@ public class Cell {
                 ", color=" + color ;
     }
 
-    boolean isAdjacentTo(Cell otherCell) {
-        if (isDiagonal(otherCell)) {
-            return false;
-        }
-        return isUnder(otherCell) || isAbove(otherCell) ||
-                isRight(otherCell) || isLeft(otherCell);
-    }
-
     private boolean isDiagonal(Cell otherCell) {
         return otherCell.row != row && otherCell.col != col;
     }
@@ -66,9 +70,5 @@ public class Cell {
 
     private boolean isUnder(Cell otherCell) {
         return row + 1 == otherCell.row;
-    }
-
-    public void changeColor(Color color) {
-        this.color = color;
     }
 }

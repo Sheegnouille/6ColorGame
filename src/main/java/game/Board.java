@@ -36,6 +36,14 @@ public class Board {
         return new ArrayList<>(result);
     }
 
+    public void changeColor(Cell cellToChange, Color color) {
+        List<Cell> cellsToChange = getContiguousColor(cellToChange);
+        for (Cell cell : cells) {
+            if (cellsToChange.contains(cell))
+                cell.changeColor(color);
+        }
+    }
+
     private Optional<Cell> findFirstUnprocessedCell(Set<Cell> cells, Set<Cell> processedCells) {
         return cells.stream()
                 .filter(newCell -> !processedCells.contains(newCell))
@@ -49,14 +57,7 @@ public class Board {
                 .collect(Collectors.toList());
     }
 
-    public void changeColor(Cell cellToChange, Color color) {
-        List<Cell> cellsToChange = getContiguousColor(cellToChange);
-        for (Cell cell : cells) {
-            if (cellsToChange.contains(cell))
-                cell.changeColor(color);
-        }
-    }
-
+    // TODO
     public Cell getStartingCell() {
         return null;
     }

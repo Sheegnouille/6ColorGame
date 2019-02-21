@@ -29,17 +29,15 @@ private Board board;
 
     @Test
     public void should_add_starting_cell_to_player_when_add_new_player() {
-        Player newPlayer = new Player("Toto");
+        game.addPlayer("Toto");
 
-        game.add(newPlayer);
-
-        Assertions.assertThat(game.getStartingCell(newPlayer)).isEqualTo(startingCell);
+        Assertions.assertThat(game.getCurrentPlayerStartingCell()).isEqualTo(startingCell);
         verify(board).getStartingCell();
     }
 
     @Test
     public void player_starting_cell_changes_color_when_player_chooses_a_color() {
-        game.add(new Player("Tata"));
+        game.addPlayer("Tata");
 
         game.currentPlayerChooseColor(BLUE);
 
@@ -48,45 +46,37 @@ private Board board;
 
     @Test
     public void current_player_is_the_only_player() {
-        Player toto = new Player("Toto");
+        game.addPlayer("Toto");
 
-        game.add(toto);
-
-        Assertions.assertThat(game.getCurrentPlayer()).isEqualTo(toto);
+        Assertions.assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
     }
 
     @Test
     public void current_player_is_first_player_added() {
-        Player toto = new Player("Toto");
-        Player titi = new Player("Titi");
+        game.addPlayer("Toto");
+        game.addPlayer("Titi");
 
-        game.add(toto);
-        game.add(titi);
-
-        Assertions.assertThat(game.getCurrentPlayer()).isEqualTo(toto);
+        Assertions.assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
     }
 
     @Test
     public void current_player_changes_when_player_chooses_a_color() {
-        Player toto = new Player("Toto", board.getStartingCell());
-        Player titi = new Player("Titi", board.getStartingCell());
-        game.add(toto);
-        game.add(titi);
+        game.addPlayer("Toto");
+        game.addPlayer("Titi");
 
         game.currentPlayerChooseColor(RED);
 
         Player currentPlayer = game.getCurrentPlayer();
-        Assertions.assertThat(currentPlayer).isEqualTo(titi);
+        Assertions.assertThat(currentPlayer.hasName("Titi")).isTrue();
     }
 
     @Test
     public void when_all_players_played_current_player_loops() {
-        Player toto = new Player("Toto", board.getStartingCell());
-        game.add(toto);
+        game.addPlayer("Toto");
 
         game.currentPlayerChooseColor(RED);
 
         Player currentPlayer = game.getCurrentPlayer();
-        Assertions.assertThat(currentPlayer).isEqualTo(toto);
+        Assertions.assertThat(currentPlayer.hasName("Toto")).isTrue();
     }
 }

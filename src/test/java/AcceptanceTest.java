@@ -18,13 +18,12 @@ public class AcceptanceTest {
                 RED, RED, RED);
         Board board = new Board(3, 3, colorGenerator);
         Game game = new Game(board);
-        Player player = new Player("1");
-        game.add(player);
+        game.addPlayer("1");
 
         // ACT
         game.currentPlayerChooseColor(RED);
 
         // ASSERT
-        assertThat(player.getScore()).isEqualTo(Score.valueOf(9));
+        assertThat(game.getCurrentPlayer().getScore()).isEqualTo(Score.valueOf(9));
     }
 }
