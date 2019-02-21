@@ -11,7 +11,7 @@ public class RectangularBoard implements Board {
     public RectangularBoard(int width, int height, ColorGenerator colorGenerator) {
         for (int row = 0; row < height; row++) {
             for (int column = 0; column < width; column++) {
-                cells.add(new Cell(column, row, colorGenerator.getRandomColor()));
+                cells.add(new Cell(new Position(column, row), colorGenerator.getRandomColor()));
             }
         }
         halfBoardSize = cells.size() / 2;

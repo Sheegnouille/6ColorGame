@@ -21,7 +21,7 @@ public class GameTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         game = new Game(board);
-        startingCell = new Cell(0, 0, RED);
+        startingCell = new Cell(new Position(0, 0), RED);
         when(board.provideFreeStartingCell()).thenReturn(startingCell);
     }
 

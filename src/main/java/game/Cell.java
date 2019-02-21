@@ -4,13 +4,11 @@ import java.util.Objects;
 
 public class Cell {
 
-    private final int row;
-    private final int col;
+    private final Position position;
     private Color color;
 
-    Cell(int col, int row, Color color) {
-        this.row = row;
-        this.col = col;
+    Cell(Position position, Color color) {
+        this.position = position;
         this.color = color;
     }
 
@@ -23,31 +21,11 @@ public class Cell {
     }
 
     boolean isAdjacentTo(Cell otherCell) {
-        if (isDiagonal(otherCell)) {
+        if (position.isDiagonal(otherCell.position)) {
             return false;
         }
-        return isUnder(otherCell) || isAbove(otherCell) ||
-                isRight(otherCell) || isLeft(otherCell);
-    }
-
-    private boolean isDiagonal(Cell otherCell) {
-        return otherCell.row != row && otherCell.col != col;
-    }
-
-    private boolean isLeft(Cell otherCell) {
-        return col - 1 == otherCell.col;
-    }
-
-    private boolean isRight(Cell otherCell) {
-        return col + 1 == otherCell.col;
-    }
-
-    private boolean isAbove(Cell otherCell) {
-        return row - 1 == otherCell.row;
-    }
-
-    private boolean isUnder(Cell otherCell) {
-        return row + 1 == otherCell.row;
+        return position.isUnder(otherCell.position) || position.isAbove(otherCell.position) ||
+                position.isRight(otherCell.position) || position.isLeft(otherCell.position);
     }
 
     @Override
@@ -55,20 +33,20 @@ public class Cell {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
-        return row == cell.row &&
-                col == cell.col &&
+        return position.row == cell.position.row &&
+                position.col == cell.position.col &&
                 color == cell.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(row, col, color);
+        return Objects.hash(position.row, position.col, color);
     }
 
     @Override
     public String toString() {
-        return "row=" + row +
-                ", col=" + col +
+        return "row=" + position.row +
+                ", col=" + position.col +
                 ", color=" + color ;
     }
 }
