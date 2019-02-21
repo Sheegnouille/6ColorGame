@@ -48,4 +48,13 @@ public class Board {
                 .filter(cell::isAdjacentTo)
                 .collect(Collectors.toList());
     }
+
+    public void changeColor(List<Cell> cellsToChange, Color color) {
+        for (Cell cell : cells) {
+            if (cellsToChange.contains(cell))
+                cell.changeColor(color);
+        }
+    }
+
+
 }

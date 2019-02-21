@@ -6,7 +6,7 @@ public class Cell {
 
     private final int row;
     private final int col;
-    private final Color color;
+    private Color color;
 
     public Cell(int col, int row, Color color) {
         this.row = row;
@@ -14,7 +14,7 @@ public class Cell {
         this.color = color;
     }
 
-    public boolean isSameColor(Cell otherCell) {
+    boolean isSameColor(Cell otherCell) {
         return this.color.equals(otherCell.color);
     }
 
@@ -66,5 +66,9 @@ public class Cell {
 
     private boolean isUnder(Cell otherCell) {
         return row + 1 == otherCell.row;
+    }
+
+    public void changeColor(Color color) {
+        this.color = color;
     }
 }

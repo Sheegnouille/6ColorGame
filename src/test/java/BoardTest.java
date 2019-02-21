@@ -1,8 +1,9 @@
 import game.Board;
 import game.Cell;
 import game.ColorGeneratorFake;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
 
 import static game.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,8 +64,79 @@ public class BoardTest {
         assertThat(board.getContiguousColor(cell1)).containsExactlyInAnyOrder(
                 cell1, cell2, cell3,
                 cell4, cell5, cell6,
-                cell7, cell8,
-                cell9, cell10, cell11,
-                cell12);
+                cell7, cell8, cell9,
+                cell10, cell11, cell12);
+    }
+
+    @Test
+    public void player_starts_as_blue_and_choose_red_should_have_all_cells() {
+        Board board = new Board(2,2, new ColorGeneratorFake(BLUE, BLUE, BLUE, RED));
+        Cell topLeftBlue = new Cell(0, 0, BLUE);
+        List<Cell> cellsToChange = board.getContiguousColor(topLeftBlue);
+
+        board.changeColor(cellsToChange, RED);
+
+        Cell topLeft = new Cell(0,0, RED);
+        Cell topRight= new Cell(1,0, RED);
+        Cell bottomLeft = new Cell(0,1, RED);
+        Cell bottomRight = new Cell(1,1, RED);
+        assertThat(board.getContiguousColor(topLeft)).containsExactlyInAnyOrder(
+                topLeft, topRight,
+                bottomLeft, bottomRight);
+    }
+
+    @Test
+    public void change_all_cell_to_red() {
+        Board board = new Board(4,4, new ColorGeneratorFake(RED, BLUE, GREEN));
+        Cell topLeft = new Cell(0, 0, RED);
+
+        List<Cell> cellsToChange = board.getContiguousColor(topLeft);
+        board.changeColor(cellsToChange, BLUE);
+        topLeft.changeColor(BLUE);
+
+        cellsToChange = board.getContiguousColor(topLeft);
+        board.changeColor(cellsToChange, GREEN);
+        topLeft.changeColor(GREEN);
+
+        cellsToChange = board.getContiguousColor(topLeft);
+        board.changeColor(cellsToChange, RED);
+        topLeft.changeColor(RED);
+
+        cellsToChange = board.getContiguousColor(topLeft);
+        board.changeColor(cellsToChange, BLUE);
+        topLeft.changeColor(BLUE);
+
+        cellsToChange = board.getContiguousColor(topLeft);
+        board.changeColor(cellsToChange, GREEN);
+        topLeft.changeColor(GREEN);
+
+        cellsToChange = board.getContiguousColor(topLeft);
+        board.changeColor(cellsToChange, RED);
+        topLeft.changeColor(RED);
+
+        assertThat(board.getContiguousColor(topLeft).size()).isEqualTo(16);
+    }
+
+    @Test
+    public void name() {
+        Board board = new Board(5,5, new ColorGeneratorFake(
+                RED, RED, RED, RED, RED,
+                RED, BLUE, BLUE, BLUE, RED,
+                RED, BLUE, RED, BLUE, RED,
+                RED, BLUE, BLUE, BLUE, RED,
+                RED, RED, RED, RED, RED
+                ));
+
+        Cell center = new Cell(2,2, RED);
+
+        List<Cell> cellsToChange = board.getContiguousColor(center);
+        board.changeColor(cellsToChange, BLUE);
+        center.changeColor(BLUE);
+
+        cellsToChange = board.getContiguousColor(center);
+        board.changeColor(cellsToChange, RED);
+        center.changeColor(RED);
+
+        assertThat(board.getContiguousColor(center).size()).isEqualTo(25);
     }
 }
