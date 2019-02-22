@@ -166,8 +166,8 @@ public class RectangularBoardTest {
     public void first_free_starting_cell_is_0_0() {
         Cell startingCell = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
         Board board = aRectangularBoard()
-                .withWidth(1)
-                .withHeight(1)
+                .withWidth(2)
+                .withHeight(2)
                 .withColorGenerator(new ColorGeneratorFake(RED))
                 .build();
 
@@ -209,9 +209,24 @@ public class RectangularBoardTest {
                 .withWidth(2)
                 .withColorGenerator(new ColorGeneratorFake(RED))
                 .build();
+
         Cell firstCell = board.provideFreeStartingCell();
         Cell secondCell = board.provideFreeStartingCell();
 
         assertThat(firstCell).isNotEqualTo(secondCell);
+    }
+
+    @Test
+    public void second_starting_cell_should_be_opposite_corner() {
+        Board board = aRectangularBoard()
+                .withHeight(2)
+                .withWidth(2)
+                .withColorGenerator(new ColorGeneratorFake(RED))
+                .build();
+
+        Cell secondCell = new Cell(aPosition().withRow(1).withColumn(1).build(), RED);
+        board.provideFreeStartingCell();
+
+        assertThat(board.provideFreeStartingCell()).isEqualTo(secondCell);
     }
 }

@@ -3,21 +3,50 @@ package game;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static game.Position.PositionBuilder.aPosition;
+
 public class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
-    private final int halfBoardSize;
-    private final List<Cell> possibleStartingCells = new ArrayList<>();
+    private final int minimumCellsToWin;
+    private Queue<Cell> possibleStartingCells = new LinkedList<>();
 
-    private RectangularBoard(int width, int height, ColorGenerator colorGenerator) {
-        for (int row = 0; row < height; row++) {
-            for (int column = 0; column < width; column++) {
+    private RectangularBoard(ColorGenerator colorGenerator, Dimension dimension) {
+        for (int row = 0; row < dimension.getHeight(); row++) {
+            for (int column = 0; column < dimension.getWidth(); column++) {
                 Cell cellToAdd = new Cell(new Position(column, row), colorGenerator.getRandomColor());
                 cells.add(cellToAdd);
-                possibleStartingCells.add(cellToAdd);
             }
         }
-        halfBoardSize = cells.size() / 2;
+        populatePossibleStartingCell(dimension);
+        minimumCellsToWin = cells.size() / 2;
+    }
+
+    private void populatePossibleStartingCell(Dimension dimension) {
+        Position topLeft = aPosition()
+                .withColumn(0)
+                .withRow(0).build();
+        addStartingCell(dimension, topLeft);
+
+        Position bottomRight = aPosition()
+                .withColumn(dimension.getWidth() - 1)
+                .withRow(dimension.getHeight() - 1).build();
+        addStartingCell(dimension, bottomRight);
+
+        Position topRight = aPosition()
+                .withColumn(dimension.getWidth() - 1)
+                .withRow(0).build();
+        addStartingCell(dimension, topRight);
+
+        Position bottomLeft = aPosition()
+                .withColumn(0)
+                .withRow(dimension.getHeight() - 1).build();
+        addStartingCell(dimension, bottomLeft);
+    }
+
+    private void addStartingCell(Dimension dimension, Position position) {
+        int topLeftCellIndex = position.transformIntoIndex(dimension);
+        possibleStartingCells.add(cells.get(topLeftCellIndex));
     }
 
     @Override
@@ -31,8 +60,7 @@ public class RectangularBoard implements Board {
 
     @Override
     public Cell provideFreeStartingCell() {
-        return possibleStartingCells.remove(new Random().nextInt(possibleStartingCells.size()));
-//        return cells.get(0);
+        return possibleStartingCells.poll();
     }
 
     @Override
@@ -43,7 +71,7 @@ public class RectangularBoard implements Board {
 
     @Override
     public boolean isTerritoryDominant(Cell cell) {
-        return determineTerritorySizeFromCell(cell) > halfBoardSize;
+        return determineTerritorySizeFromCell(cell) > minimumCellsToWin;
     }
 
     List<Cell> determineContiguousColor(Cell cell) {
@@ -104,7 +132,7 @@ public class RectangularBoard implements Board {
         }
 
         public RectangularBoard build() {
-            return new RectangularBoard(width, height, colorGenerator);
+            return new RectangularBoard(colorGenerator, new Dimension(width, height));
         }
     }
 }

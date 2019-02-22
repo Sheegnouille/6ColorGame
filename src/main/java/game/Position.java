@@ -53,6 +53,10 @@ final class Position {
         return Objects.hash(row, col);
     }
 
+    int transformIntoIndex(Dimension dimension) {
+        return this.row * dimension.getWidth() + this.col;
+    }
+
     static final class PositionBuilder {
         private int row;
         private int col;
