@@ -1,11 +1,11 @@
-import game.Board;
-import game.ColorGenerator;
-import game.ColorGeneratorFake;
 import game.Game;
+import game.board.Board;
+import game.color.ColorGenerator;
+import game.color.ColorGeneratorFake;
 import org.junit.Test;
 
-import static game.Color.*;
-import static game.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
+import static game.board.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
+import static game.color.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AcceptanceTest {

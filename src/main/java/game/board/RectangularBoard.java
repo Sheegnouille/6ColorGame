@@ -1,14 +1,18 @@
-package game;
+package game.board;
+
+import game.ConsolePrinter;
+import game.Printer;
+import game.color.Color;
+import game.color.ColorGenerator;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static game.Position.PositionBuilder.aPosition;
+import static game.board.Position.PositionBuilder.aPosition;
 
 public class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
-    private final int minimumCellsToWin;
     private final Dimension dimension;
     private final Printer printer;
     private Queue<Cell> possibleStartingCells = new LinkedList<>();
@@ -23,14 +27,15 @@ public class RectangularBoard implements Board {
             }
         }
         populatePossibleStartingCell(dimension);
-        minimumCellsToWin = cells.size() / 2;
     }
 
     private void show() {
         for (int row = 0; row < dimension.getHeight(); row++) {
             StringBuilder line = new StringBuilder();
             for (int column = 0; column < dimension.getWidth(); column++) {
-                line.append(cells.get(new Position(column, row).transformIntoIndex(dimension)).showColor().substring(0, 1)).append("  ");
+                Position position = new Position(column, row);
+                Cell cell = cells.get(position.transformIntoIndex(dimension));
+                line.append(cell.showColor(), 0, 1).append("  ");
             }
             printer.printLine(line.toString());
         }
@@ -83,8 +88,8 @@ public class RectangularBoard implements Board {
     }
 
     @Override
-    public boolean isTerritoryDominant(Cell cell) {
-        return determineTerritorySizeFromCell(cell) > minimumCellsToWin;
+    public int determineBoardSize() {
+        return cells.size();
     }
 
     List<Cell> determineTerritory(Cell cell) {

@@ -1,4 +1,6 @@
-package game;
+package game.board;
+
+import game.color.Color;
 
 import java.util.Objects;
 
@@ -7,7 +9,7 @@ public class Cell {
     private final Position position;
     private Color color;
 
-    Cell(Position position, Color color) {
+    public Cell(Position position, Color color) {
         this.position = position;
         this.color = color;
     }
@@ -28,7 +30,7 @@ public class Cell {
                 position.isRight(otherCell.position) || position.isLeft(otherCell.position);
     }
 
-    boolean isOfColor(Color color) {
+    public boolean isOfColor(Color color) {
         return this.color == color;
     }
 

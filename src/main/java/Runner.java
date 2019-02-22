@@ -1,4 +1,10 @@
-import game.*;
+import game.ConsolePrinter;
+import game.Game;
+import game.board.Board;
+import game.board.Dimension;
+import game.board.RectangularBoard;
+import game.color.Color;
+import game.color.ColorGenerator;
 import game.color.ColorGeneratorRandom;
 
 import java.util.Scanner;

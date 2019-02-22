@@ -1,4 +1,6 @@
-package game;
+package game.board;
+
+import game.color.Color;
 
 public interface Board {
     void changeColor(Cell cellToChange, Color color);
@@ -7,5 +9,5 @@ public interface Board {
 
     int determineTerritorySizeFromCell(Cell cell);
 
-    boolean isTerritoryDominant(Cell cell);
+    int determineBoardSize();
 }

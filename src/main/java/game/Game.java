@@ -1,5 +1,9 @@
 package game;
 
+import game.board.Board;
+import game.board.Cell;
+import game.color.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +48,9 @@ public class Game {
     }
 
     public boolean isFinished() {
-        return board.isTerritoryDominant(getCurrentPlayerStartingCell());
+        int playerTerritorySize = board.determineTerritorySizeFromCell(getCurrentPlayerStartingCell());
+        int boardSize = board.determineBoardSize();
+        return playerTerritorySize >= boardSize / players.size();
     }
 
     private void nextPlayer() {
@@ -60,9 +66,4 @@ public class Game {
         return currentPlayer.getStartingCell();
     }
 
-    Score calculateCurrentPlayerScore() {
-        Player currentPlayer = getCurrentPlayer();
-        Cell startingCell = currentPlayer.getStartingCell();
-        return Score.valueOf(board.determineTerritorySizeFromCell(startingCell));
-    }
 }

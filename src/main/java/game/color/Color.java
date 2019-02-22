@@ -1,4 +1,4 @@
-package game;
+package game.color;
 
 import java.util.stream.Stream;
 

@@ -1,8 +1,5 @@
 package game.color;
 
-import game.Color;
-import game.ColorGenerator;
-
 import java.util.Random;
 
 public class ColorGeneratorRandom implements ColorGenerator {

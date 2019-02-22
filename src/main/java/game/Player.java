@@ -1,5 +1,7 @@
 package game;
 
+import game.board.Cell;
+
 import java.util.Objects;
 
 public final class Player {

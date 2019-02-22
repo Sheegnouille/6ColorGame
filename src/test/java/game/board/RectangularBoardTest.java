@@ -1,10 +1,11 @@
-package game;
+package game.board;
 
+import game.color.ColorGeneratorFake;
 import org.junit.Test;
 
-import static game.Color.*;
-import static game.Position.PositionBuilder.aPosition;
-import static game.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
+import static game.board.Position.PositionBuilder.aPosition;
+import static game.board.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
+import static game.color.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RectangularBoardTest {
@@ -174,32 +175,6 @@ public class RectangularBoardTest {
         Cell cell = board.provideFreeStartingCell();
 
         assertThat(cell).isEqualTo(startingCell);
-    }
-
-    @Test
-    public void single_cell_on_checker_pattern_board_should_not_be_dominant() {
-        Board board = aRectangularBoard()
-                .withWidth(2)
-                .withHeight(2)
-                .withColorGenerator(new ColorGeneratorFake(
-                        BLUE, RED,
-                        RED, BLUE))
-                .build();
-        Cell cell = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
-        boolean isTerritoryDominant = board.isTerritoryDominant(cell);
-        assertThat(isTerritoryDominant).isFalse();
-    }
-
-    @Test
-    public void one_color_board_should_have_dominant_territory() {
-        Board board = aRectangularBoard()
-                .withWidth(2)
-                .withHeight(2)
-                .withColorGenerator(new ColorGeneratorFake(BLUE))
-                .build();
-        Cell cell = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
-        boolean isTerritoryDominant = board.isTerritoryDominant(cell);
-        assertThat(isTerritoryDominant).isTrue();
     }
 
     @Test
