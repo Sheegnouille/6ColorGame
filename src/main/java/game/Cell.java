@@ -53,4 +53,8 @@ public class Cell {
     public int hashCode() {
         return Objects.hash(position, color);
     }
+
+    String showColor() {
+        return color.toString();
+    }
 }

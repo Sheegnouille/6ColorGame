@@ -9,9 +9,13 @@ public class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
     private final int minimumCellsToWin;
+    private final Dimension dimension;
+    private final Printer printer;
     private Queue<Cell> possibleStartingCells = new LinkedList<>();
 
-    private RectangularBoard(ColorGenerator colorGenerator, Dimension dimension) {
+    public RectangularBoard(Dimension dimension, ColorGenerator colorGenerator, Printer printer) {
+        this.dimension = dimension;
+        this.printer = printer;
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Cell cellToAdd = new Cell(new Position(column, row), colorGenerator.getRandomColor());
@@ -20,6 +24,16 @@ public class RectangularBoard implements Board {
         }
         populatePossibleStartingCell(dimension);
         minimumCellsToWin = cells.size() / 2;
+    }
+
+    private void show() {
+        for (int row = 0; row < dimension.getHeight(); row++) {
+            StringBuilder line = new StringBuilder();
+            for (int column = 0; column < dimension.getWidth(); column++) {
+                line.append(cells.get(new Position(column, row).transformIntoIndex(dimension)).showColor().substring(0, 1)).append("  ");
+            }
+            printer.printLine(line.toString());
+        }
     }
 
     private void populatePossibleStartingCell(Dimension dimension) {
@@ -54,6 +68,7 @@ public class RectangularBoard implements Board {
             if (cellsToChange.contains(cell))
                 cell.changeColor(color);
         }
+        show();
     }
 
     @Override
@@ -133,7 +148,7 @@ public class RectangularBoard implements Board {
         }
 
         public RectangularBoard build() {
-            return new RectangularBoard(colorGenerator, new Dimension(width, height));
+            return new RectangularBoard(new Dimension(width, height), colorGenerator, new ConsolePrinter());
         }
     }
 }

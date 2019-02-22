@@ -30,7 +30,9 @@ public class Game {
 
     private void currentPlayerPlays(Color color) {
         board.changeColor(getCurrentPlayerStartingCell(), color);
-        nextPlayer();
+        if (!isFinished()) {
+            nextPlayer();
+        }
     }
 
     private boolean isColorAvailable(Color color) {
@@ -42,17 +44,14 @@ public class Game {
     }
 
     public boolean isFinished() {
-        Optional<Player> winner = players.stream().filter(
-                player -> board.isTerritoryDominant(player.getStartingCell())
-        ).findFirst();
-        return winner.isPresent();
+        return board.isTerritoryDominant(getCurrentPlayerStartingCell());
     }
 
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
-    Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
 
