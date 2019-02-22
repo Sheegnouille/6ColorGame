@@ -18,7 +18,7 @@ public class RectangularBoardTest {
                 .build();
         Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
         Cell cell2 = new Cell(aPosition().withColumn(0).withRow(1).build(), BLUE);
-        assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1, cell2);
+        assertThat(board.determineTerritory(cell1)).containsExactlyInAnyOrder(cell1, cell2);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class RectangularBoardTest {
                 .withColorGenerator(new ColorGeneratorFake(BLUE, RED))
                 .build();
         Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
-        assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1);
+        assertThat(board.determineTerritory(cell1)).containsExactlyInAnyOrder(cell1);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class RectangularBoardTest {
                 .withColorGenerator(new ColorGeneratorFake(BLUE, RED, BLUE))
                 .build();
         Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
-        assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1);
+        assertThat(board.determineTerritory(cell1)).containsExactlyInAnyOrder(cell1);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class RectangularBoardTest {
         Cell cell1 = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
         Cell cell2 = new Cell(aPosition().withColumn(0).withRow(1).build(), BLUE);
         Cell cell3 = new Cell(aPosition().withColumn(0).withRow(2).build(), BLUE);
-        assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(cell1, cell2, cell3);
+        assertThat(board.determineTerritory(cell1)).containsExactlyInAnyOrder(cell1, cell2, cell3);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class RectangularBoardTest {
         Cell cell10 = new Cell(aPosition().withColumn(1).withRow(3).build(), BLUE);
         Cell cell11 = new Cell(aPosition().withColumn(2).withRow(3).build(), BLUE);
         Cell cell12 = new Cell(aPosition().withColumn(2).withRow(4).build(), BLUE);
-        assertThat(board.determineContiguousColor(cell1)).containsExactlyInAnyOrder(
+        assertThat(board.determineTerritory(cell1)).containsExactlyInAnyOrder(
                 cell1, cell2, cell3,
                 cell4, cell5, cell6,
                 cell7, cell8, cell9,
@@ -102,7 +102,7 @@ public class RectangularBoardTest {
         Cell topRight = new Cell(aPosition().withColumn(1).withRow(0).build(), RED);
         Cell bottomLeft = new Cell(aPosition().withColumn(0).withRow(1).build(), RED);
         Cell bottomRight = new Cell(aPosition().withColumn(1).withRow(1).build(), RED);
-        assertThat(board.determineContiguousColor(topLeft)).containsExactlyInAnyOrder(
+        assertThat(board.determineTerritory(topLeft)).containsExactlyInAnyOrder(
                 topLeft, topRight,
                 bottomLeft, bottomRight);
     }
@@ -134,7 +134,7 @@ public class RectangularBoardTest {
         board.changeColor(topLeft, RED);
         topLeft.changeColor(RED);
 
-        assertThat(board.determineContiguousColor(topLeft).size()).isEqualTo(16);
+        assertThat(board.determineTerritory(topLeft).size()).isEqualTo(16);
     }
 
     @Test
@@ -159,7 +159,7 @@ public class RectangularBoardTest {
         board.changeColor(center, RED);
         center.changeColor(RED);
 
-        assertThat(board.determineContiguousColor(center).size()).isEqualTo(25);
+        assertThat(board.determineTerritory(center).size()).isEqualTo(25);
     }
 
     @Test

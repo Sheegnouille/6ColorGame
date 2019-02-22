@@ -26,21 +26,19 @@ public class RectangularBoard implements Board {
         Position topLeft = aPosition()
                 .withColumn(0)
                 .withRow(0).build();
-        addStartingCell(dimension, topLeft);
-
         Position bottomRight = aPosition()
                 .withColumn(dimension.getWidth() - 1)
                 .withRow(dimension.getHeight() - 1).build();
-        addStartingCell(dimension, bottomRight);
-
         Position topRight = aPosition()
                 .withColumn(dimension.getWidth() - 1)
                 .withRow(0).build();
-        addStartingCell(dimension, topRight);
-
         Position bottomLeft = aPosition()
                 .withColumn(0)
                 .withRow(dimension.getHeight() - 1).build();
+
+        addStartingCell(dimension, topLeft);
+        addStartingCell(dimension, bottomRight);
+        addStartingCell(dimension, topRight);
         addStartingCell(dimension, bottomLeft);
     }
 
@@ -51,7 +49,7 @@ public class RectangularBoard implements Board {
 
     @Override
     public void changeColor(Cell cellToChange, Color color) {
-        List<Cell> cellsToChange = determineContiguousColor(cellToChange);
+        List<Cell> cellsToChange = determineTerritory(cellToChange);
         for (Cell cell : cells) {
             if (cellsToChange.contains(cell))
                 cell.changeColor(color);
@@ -65,7 +63,7 @@ public class RectangularBoard implements Board {
 
     @Override
     public int determineTerritorySizeFromCell(Cell cell) {
-        List<Cell> territory = determineContiguousColor(cell);
+        List<Cell> territory = determineTerritory(cell);
         return territory.size();
     }
 
@@ -74,10 +72,14 @@ public class RectangularBoard implements Board {
         return determineTerritorySizeFromCell(cell) > minimumCellsToWin;
     }
 
-    List<Cell> determineContiguousColor(Cell cell) {
+    List<Cell> determineTerritory(Cell cell) {
         if (!cells.contains(cell)) {
             return new ArrayList<>();
         }
+        return new ArrayList<>(computeContiguousColor(cell));
+    }
+
+    private Set<Cell> computeContiguousColor(Cell cell) {
         Set<Cell> result = new HashSet<>();
         Set<Cell> processed = new HashSet<>();
         Optional<Cell> currentProcessingCell = Optional.of(cell);
@@ -87,14 +89,7 @@ public class RectangularBoard implements Board {
             processed.add(currentProcessingCell.get());
             currentProcessingCell = findFirstUnprocessedCell(result, processed);
         }
-
-        return new ArrayList<>(result);
-    }
-
-    private Optional<Cell> findFirstUnprocessedCell(Set<Cell> cells, Set<Cell> processedCells) {
-        return cells.stream()
-                .filter(newCell -> !processedCells.contains(newCell))
-                .findFirst();
+        return result;
     }
 
     private List<Cell> determineAdjacentCellsOfSameColor(Cell cell) {
@@ -102,6 +97,12 @@ public class RectangularBoard implements Board {
                 .filter(cell::isSameColor)
                 .filter(cell::isAdjacentTo)
                 .collect(Collectors.toList());
+    }
+
+    private Optional<Cell> findFirstUnprocessedCell(Set<Cell> cells, Set<Cell> processedCells) {
+        return cells.stream()
+                .filter(newCell -> !processedCells.contains(newCell))
+                .findFirst();
     }
 
     public static final class RectangularBoardBuilder {

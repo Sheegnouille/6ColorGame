@@ -11,6 +11,10 @@ final class Position {
         this.row = row;
     }
 
+    int transformIntoIndex(Dimension dimension) {
+        return this.row * dimension.getWidth() + this.col;
+    }
+
     boolean isDiagonal(Position otherPosition) {
         return otherPosition.row != row && otherPosition.col != col;
     }
@@ -51,10 +55,6 @@ final class Position {
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
-    }
-
-    int transformIntoIndex(Dimension dimension) {
-        return this.row * dimension.getWidth() + this.col;
     }
 
     static final class PositionBuilder {
