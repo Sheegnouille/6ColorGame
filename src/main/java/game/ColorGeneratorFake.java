@@ -1,7 +1,5 @@
 package game;
 
-import static game.Color.BLUE;
-
 public class ColorGeneratorFake implements ColorGenerator {
 
     private final Color[] colors;

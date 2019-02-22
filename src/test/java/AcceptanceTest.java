@@ -36,12 +36,14 @@ public class AcceptanceTest {
     public void game_with_two_players_should_finish_when_one_player_territory_is_dominant() {
         // ARRANGE
         ColorGenerator colorGenerator = new ColorGeneratorFake(
-                BLUE, BLUE, BLUE,
-                RED, RED, RED,
-                GREEN, GREEN, GREEN);
+                RED, BLUE, GREEN, RED, BLUE,
+                BLUE, GREEN, RED, BLUE, GREEN,
+                GREEN, RED, BLUE, GREEN, RED,
+                RED, BLUE, GREEN, RED, BLUE,
+                BLUE, GREEN, RED, BLUE, GREEN);
         Board board = aRectangularBoard()
-                .withWidth(10)
-                .withHeight(10)
+                .withWidth(5)
+                .withHeight(5)
                 .withColorGenerator(colorGenerator)
                 .build();
         Game game = new Game(board);
@@ -50,13 +52,15 @@ public class AcceptanceTest {
 
         // ACT
         game.currentPlayerChooseColor(BLUE);
-        game.currentPlayerChooseColor(GREEN);
         game.currentPlayerChooseColor(RED);
+        game.currentPlayerChooseColor(GREEN);
         game.currentPlayerChooseColor(BLUE);
-        game.currentPlayerChooseColor(GREEN);
         game.currentPlayerChooseColor(RED);
+        game.currentPlayerChooseColor(GREEN);
+        game.currentPlayerChooseColor(BLUE);
 
         // ASSERT
+        System.out.println(board);
         assertThat(game.isFinished()).isTrue();
     }
 }

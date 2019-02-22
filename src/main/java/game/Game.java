@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Game {
 
@@ -25,7 +26,10 @@ public class Game {
     }
 
     public boolean isFinished() {
-        return board.isTerritoryDominant(getCurrentPlayerStartingCell());
+        Optional<Player> winner = players.stream().filter(
+                player -> board.isTerritoryDominant(player.getStartingCell())
+        ).findFirst();
+        return winner.isPresent();
     }
 
     private void nextPlayer() {
