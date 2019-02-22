@@ -20,9 +20,25 @@ public class Game {
         players.add(player);
     }
 
-    public void currentPlayerChooseColor(Color color) {
+    public boolean currentPlayerChooseColor(Color color) {
+        if (!isColorAvailable(color))
+            return false;
+
+        currentPlayerPlays(color);
+        return true;
+    }
+
+    private void currentPlayerPlays(Color color) {
         board.changeColor(getCurrentPlayerStartingCell(), color);
         nextPlayer();
+    }
+
+    private boolean isColorAvailable(Color color) {
+        Optional<Cell> sameColorCell = players.stream()
+                .map(Player::getStartingCell)
+                .filter(cell -> cell.isOfColor(color))
+                .findFirst();
+        return !sameColorCell.isPresent();
     }
 
     public boolean isFinished() {

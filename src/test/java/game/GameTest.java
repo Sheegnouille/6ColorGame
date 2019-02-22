@@ -62,7 +62,7 @@ public class GameTest {
         game.addPlayer("Toto");
         game.addPlayer("Titi");
 
-        game.currentPlayerChooseColor(RED);
+        game.currentPlayerChooseColor(BLUE);
 
         Player currentPlayer = game.getCurrentPlayer();
         assertThat(currentPlayer.hasName("Titi")).isTrue();
@@ -118,10 +118,19 @@ public class GameTest {
         game.addPlayer("Tata");
 
         Cell startingCellPlayer1 = game.getCurrentPlayerStartingCell();
-        game.currentPlayerChooseColor(RED);
+        game.currentPlayerChooseColor(BLUE);
         Cell startingCellPlayer2 = game.getCurrentPlayerStartingCell();
 
         assertThat(startingCellPlayer1).isNotEqualTo(startingCellPlayer2);
         verify(board, times(2)).provideFreeStartingCell();
+    }
+
+    @Test
+    public void a_player_cannot_choose_the_color_of_the_other_player() {
+        game.addPlayer("Toto");
+        game.addPlayer("Tata");
+        game.currentPlayerChooseColor(RED);
+        boolean canPlayerChooseColor = game.currentPlayerChooseColor(RED);
+        assertThat(canPlayerChooseColor).isFalse();
     }
 }

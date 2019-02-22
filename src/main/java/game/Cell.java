@@ -28,6 +28,10 @@ public class Cell {
                 position.isRight(otherCell.position) || position.isLeft(otherCell.position);
     }
 
+    boolean isOfColor(Color color) {
+        return this.color == color;
+    }
+
     @Override
     public String toString() {
         return "Cell{" +

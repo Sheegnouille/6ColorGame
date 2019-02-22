@@ -60,7 +60,6 @@ public class AcceptanceTest {
         game.currentPlayerChooseColor(BLUE);
 
         // ASSERT
-        System.out.println(board);
         assertThat(game.isFinished()).isTrue();
     }
 }
