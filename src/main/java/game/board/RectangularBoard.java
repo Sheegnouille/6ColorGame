@@ -29,7 +29,7 @@ public class RectangularBoard implements Board {
         populatePossibleStartingCell(dimension);
     }
 
-    private void show() {
+    public void show() {
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Position position = new Position(column, row);
@@ -38,6 +38,7 @@ public class RectangularBoard implements Board {
             }
             printer.returnLine();
         }
+        printer.returnLine();
     }
 
     private void populatePossibleStartingCell(Dimension dimension) {
@@ -72,7 +73,6 @@ public class RectangularBoard implements Board {
             if (cellsToChange.contains(cell))
                 cell.changeColor(color);
         }
-        show();
     }
 
     @Override

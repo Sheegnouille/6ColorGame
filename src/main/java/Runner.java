@@ -11,26 +11,43 @@ import java.util.Scanner;
 
 class Runner {
     public static void main(String[] args) {
-        Dimension boardDimension = new Dimension(25, 25);
+        Dimension boardDimension = new Dimension(5, 5);
         ColorGenerator colorGenerator = new ColorGeneratorRandom();
         Board board = new RectangularBoard(boardDimension, colorGenerator, new ConsolePrinter());
         Game game = new Game(board);
-        game.addPlayer("Benoît");
+
+        Scanner scanner = new Scanner(System.in);
+        boolean addAnotherPlayer = true;
+        while ((game.getNumberOfPlayers() < 4) && addAnotherPlayer) {
+            System.out.println("New player name :");
+            game.addPlayer(scanner.nextLine());
+            if (game.getNumberOfPlayers() > 1 && game.getNumberOfPlayers() < 4) {
+                String answer;
+                do {
+                    System.out.println("Would you like to add another player (Yes/No)");
+                    answer = scanner.nextLine();
+                } while (!(answer.equalsIgnoreCase("Yes") ||
+                        answer.equalsIgnoreCase("No")));
+                if (answer.equalsIgnoreCase("No")) {
+                    addAnotherPlayer = false;
+                }
+            }
+        }
+        /*game.addPlayer("Benoît");
         game.addPlayer("Yann");
         game.addPlayer("Clément");
-        game.addPlayer("JB");
-        Scanner scanner = new Scanner(System.in);
+        game.addPlayer("JB");*/
+
         while (!game.isFinished()) {
-            System.out.print(game.getCurrentPlayer() + " : Choose color (Available colors : ");
-            Game.getAvailableColors(game).forEach(color -> System.out.print(color.toString()));
-            System.out.println(")");
-            String chosenColor = scanner.nextLine();
+            game.toto();
+            String chosenColor = scanner.nextLine().toUpperCase();
             if (!Color.exists(chosenColor) || !game.currentPlayerChooseColor(Color.valueOf(chosenColor))) {
                 System.out.println("Color not available");
             }
-            System.out.println();
         }
-        System.out.println(game.getCurrentPlayer());
+        System.out.println(" ");
+        System.out.println("Game finished");
+        game.displayScore();
     }
 
 }

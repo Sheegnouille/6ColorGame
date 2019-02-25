@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Game {
 
@@ -20,8 +19,27 @@ public class Game {
         this.board = board;
     }
 
-    public static Stream<Color> getAvailableColors(Game game) {
-        return Arrays.stream(Color.values()).filter(game::isColorAvailable);
+    // TODO rename
+    public void toto() {
+        board.show();
+        System.out.print(getCurrentPlayer() + " : Choose color (Available colors : ");
+        showAvailableColor();
+        System.out.println(")");
+    }
+
+    public void displayScore() {
+        board.show();
+        for (Player player : players) {
+            System.out.println(player +
+                    "Score : " +
+                    board.determineTerritorySizeFromCell(player.getStartingCell()));
+        }
+    }
+
+    private void showAvailableColor() {
+        Arrays.stream(Color.values())
+                .filter(this::isColorAvailable)
+                .forEach(color -> System.out.print(color.toString()));
     }
 
     public void addPlayer(String playerName) {
@@ -71,4 +89,10 @@ public class Game {
         Player currentPlayer = getCurrentPlayer();
         return currentPlayer.getStartingCell();
     }
+
+    public int getNumberOfPlayers() {
+        return players.size();
+    }
+
+
 }
