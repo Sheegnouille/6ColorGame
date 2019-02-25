@@ -7,6 +7,7 @@ import game.color.Color;
 import game.color.ColorGenerator;
 import game.color.ColorGeneratorRandom;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 class Runner {
@@ -21,11 +22,14 @@ class Runner {
         game.addPlayer("Jean-Baptiste");
         Scanner scanner = new Scanner(System.in);
         while (!game.isFinished()) {
-            System.out.println(game.getCurrentPlayer() + " : Choose color");
+            System.out.print(game.getCurrentPlayer() + " : Choose color (Available colors : ");
+            Arrays.stream(Color.values()).filter(color -> game.isColorAvailable(color)).forEach(color -> System.out.print(color.toString()));
+            System.out.println(")");
             String chosenColor = scanner.nextLine();
             if (!Color.exists(chosenColor) || !game.currentPlayerChooseColor(Color.valueOf(chosenColor))) {
                 System.out.println("Color not available");
             }
+            System.out.println();
         }
         System.out.println(game.getCurrentPlayer());
     }

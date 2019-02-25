@@ -35,7 +35,7 @@ public class RectangularBoard implements Board {
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Position position = new Position(column, row);
                 Cell cell = cells.get(position.transformIntoIndex(dimension));
-                line.append(cell.showColor(), 0, 1).append("  ");
+                line.append(cell.showColor()).append(" ");
             }
             printer.printLine(line.toString());
         }

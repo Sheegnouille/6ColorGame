@@ -36,10 +36,9 @@ public class Cell {
 
     @Override
     public String toString() {
-        return "Cell{" +
-                "\nposition=" + position +
-                ", \ncolor=" + color +
-                '}';
+        return "(" + position +
+                ", " + color +
+                ')';
     }
 
     @Override
