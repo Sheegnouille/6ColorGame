@@ -63,7 +63,7 @@ public class Game {
         }
     }
 
-    private boolean isColorAvailable(Color color) {
+    public boolean isColorAvailable(Color color) {
         Optional<Cell> sameColorCell = players.stream()
                 .map(Player::getStartingCell)
                 .filter(cell -> cell.isOfColor(color))
