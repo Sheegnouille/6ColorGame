@@ -5,8 +5,10 @@ import game.board.Cell;
 import game.color.Color;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Game {
 
@@ -16,6 +18,10 @@ public class Game {
 
     public Game(Board board) {
         this.board = board;
+    }
+
+    public static Stream<Color> getAvailableColors(Game game) {
+        return Arrays.stream(Color.values()).filter(game::isColorAvailable);
     }
 
     public void addPlayer(String playerName) {
@@ -65,5 +71,4 @@ public class Game {
         Player currentPlayer = getCurrentPlayer();
         return currentPlayer.getStartingCell();
     }
-
 }

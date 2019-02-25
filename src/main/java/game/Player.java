@@ -39,6 +39,6 @@ public final class Player {
     @Override
     public String toString() {
         return "Player name: " + name +
-                ", \nstarting cell: " + startingCell;
+                " " + startingCell;
     }
 }

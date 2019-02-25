@@ -31,13 +31,12 @@ public class RectangularBoard implements Board {
 
     private void show() {
         for (int row = 0; row < dimension.getHeight(); row++) {
-            StringBuilder line = new StringBuilder();
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Position position = new Position(column, row);
                 Cell cell = cells.get(position.transformIntoIndex(dimension));
-                line.append(cell.showColor(), 0, 1).append("  ");
+                printer.printCell(cell.showColor());
             }
-            printer.printLine(line.toString());
+            printer.returnLine();
         }
     }
 
