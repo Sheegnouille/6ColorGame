@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 class Runner {
     public static void main(String[] args) {
-        Dimension boardDimension = new Dimension(5, 5);
+        Dimension boardDimension = new Dimension(40, 40);
         ColorGenerator colorGenerator = new ColorGeneratorRandom();
         Board board = new RectangularBoard(boardDimension, colorGenerator, new ConsolePrinter());
         Game game = new Game(board);
@@ -33,13 +33,9 @@ class Runner {
                 }
             }
         }
-        /*game.addPlayer("Benoît");
-        game.addPlayer("Yann");
-        game.addPlayer("Clément");
-        game.addPlayer("JB");*/
 
         while (!game.isFinished()) {
-            game.toto();
+            game.askColor();
             String chosenColor = scanner.nextLine().toUpperCase();
             if (!Color.exists(chosenColor) || !game.currentPlayerChooseColor(Color.valueOf(chosenColor))) {
                 System.out.println("Color not available");

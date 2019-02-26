@@ -19,8 +19,7 @@ public class Game {
         this.board = board;
     }
 
-    // TODO rename
-    public void toto() {
+    public void askColor() {
         board.show();
         System.out.print(getCurrentPlayer() + " : Choose color (Available colors : ");
         showAvailableColor();
@@ -63,7 +62,7 @@ public class Game {
         }
     }
 
-    public boolean isColorAvailable(Color color) {
+    private boolean isColorAvailable(Color color) {
         Optional<Cell> sameColorCell = players.stream()
                 .map(Player::getStartingCell)
                 .filter(cell -> cell.isOfColor(color))
@@ -81,7 +80,7 @@ public class Game {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
-    public Player getCurrentPlayer() {
+    Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
 
