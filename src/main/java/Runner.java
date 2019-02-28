@@ -4,36 +4,19 @@ import game.board.Board;
 import game.board.Dimension;
 import game.board.RectangularBoard;
 import game.color.Color;
-import game.color.ColorGenerator;
 import game.color.ColorGeneratorRandom;
 
 import java.util.Scanner;
 
 class Runner {
     public static void main(String[] args) {
-        Dimension boardDimension = new Dimension(40, 40);
-        ColorGenerator colorGenerator = new ColorGeneratorRandom();
-        Board board = new RectangularBoard(boardDimension, colorGenerator, new ConsolePrinter());
-        Game game = new Game(board);
+        Game game = initGameWithBoardDimensionFromInput();
+        addPlayersFromInput(game);
+        run(game);
+    }
 
+    private static void run(Game game) {
         Scanner scanner = new Scanner(System.in);
-        boolean addAnotherPlayer = true;
-        while ((game.getNumberOfPlayers() < 4) && addAnotherPlayer) {
-            System.out.println("New player name :");
-            game.addPlayer(scanner.nextLine());
-            if (game.getNumberOfPlayers() > 1 && game.getNumberOfPlayers() < 4) {
-                String answer;
-                do {
-                    System.out.println("Would you like to add another player (Yes/No)");
-                    answer = scanner.nextLine();
-                } while (!(answer.equalsIgnoreCase("Yes") ||
-                        answer.equalsIgnoreCase("No")));
-                if (answer.equalsIgnoreCase("No")) {
-                    addAnotherPlayer = false;
-                }
-            }
-        }
-
         while (!game.isFinished()) {
             game.askColor();
             String chosenColor = scanner.nextLine().toUpperCase();
@@ -46,4 +29,32 @@ class Runner {
         game.displayScore();
     }
 
+    private static void addPlayersFromInput(Game game) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Set Number of players (2-4) :");
+        int totalNumberOfPlayers = Integer.parseInt(scanner.nextLine());
+
+        int currentNumberOfPlayers = game.getNumberOfPlayers();
+        while (currentNumberOfPlayers < totalNumberOfPlayers) {
+            int playerId = currentNumberOfPlayers + 1;
+            System.out.println("Player " + playerId + " name :");
+            game.addPlayer(scanner.nextLine());
+            currentNumberOfPlayers = game.getNumberOfPlayers();
+        }
+    }
+
+    private static Game initGameWithBoardDimensionFromInput() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Set Board width :");
+        int width = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Set Board height :");
+        int height = Integer.parseInt(scanner.nextLine());
+
+        Dimension boardDimension = new Dimension(width, height);
+        Board board = new RectangularBoard(boardDimension, new ColorGeneratorRandom(), new ConsolePrinter());
+        return new Game(board);
+    }
 }
