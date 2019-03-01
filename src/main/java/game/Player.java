@@ -14,12 +14,12 @@ public final class Player {
         this.startingCell = startingCell;
     }
 
-    Cell getStartingCell() {
-        return startingCell;
+    String getName() {
+        return name;
     }
 
-    boolean hasName(String name) {
-        return name.equals(this.name);
+    Cell getStartingCell() {
+        return startingCell;
     }
 
     @Override

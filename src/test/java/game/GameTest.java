@@ -51,7 +51,7 @@ public class GameTest {
     public void current_player_is_the_only_player() {
         game.addPlayer("Toto");
 
-        assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
+        assertThat(game.isPlayerInGame("Toto")).isTrue();
     }
 
     @Test
@@ -59,7 +59,7 @@ public class GameTest {
         game.addPlayer("Toto");
         game.addPlayer("Titi");
 
-        assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
+        assertThat(game.isPlayerInGame("Toto")).isTrue();
     }
 
     @Test
@@ -69,8 +69,7 @@ public class GameTest {
 
         game.currentPlayerChooseColor(BLUE);
 
-        Player currentPlayer = game.getCurrentPlayer();
-        assertThat(currentPlayer.hasName("Titi")).isTrue();
+        assertThat(game.isPlayerInGame("Titi")).isTrue();
     }
 
     @Test
@@ -79,8 +78,7 @@ public class GameTest {
 
         game.currentPlayerChooseColor(RED);
 
-        Player currentPlayer = game.getCurrentPlayer();
-        assertThat(currentPlayer.hasName("Toto")).isTrue();
+        assertThat(game.isPlayerInGame("Toto")).isTrue();
     }
 
     @Test

@@ -4,10 +4,8 @@ import game.board.Board;
 import game.board.Cell;
 import game.color.Color;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -19,26 +17,16 @@ public class Game {
         this.board = board;
     }
 
-    public void askColor() {
+    public void showBoard() {
         board.show();
-        System.out.print(getCurrentPlayer() + " : Choose color (Available colors : ");
-        showAvailableColor();
-        System.out.println(")");
     }
 
-    public void displayScore() {
-        board.show();
+    public Map<Player, Integer> getScoresByPlayer() {
+        Map<Player, Integer> scoresByPlayer = new HashMap<>();
         for (Player player : players) {
-            System.out.println(player +
-                    "Score : " +
-                    board.determineTerritorySizeFromCell(player.getStartingCell()));
+            scoresByPlayer.put(player, board.determineTerritorySizeFromCell(player.getStartingCell()));
         }
-    }
-
-    private void showAvailableColor() {
-        Arrays.stream(Color.values())
-                .filter(this::isColorAvailable)
-                .forEach(color -> System.out.print(color.toString()));
+        return scoresByPlayer;
     }
 
     public void addPlayer(String playerName) {
@@ -55,11 +43,10 @@ public class Game {
         return true;
     }
 
-    private void currentPlayerPlays(Color color) {
-        board.changeColor(getCurrentPlayerStartingCell(), color);
-        if (!isFinished()) {
-            nextPlayer();
-        }
+    public List<Color> determineAvailableColors() {
+        return Arrays.stream(Color.values())
+                .filter(this::isColorAvailable)
+                .collect(Collectors.toList());
     }
 
     private boolean isColorAvailable(Color color) {
@@ -70,28 +57,38 @@ public class Game {
         return !sameColorCell.isPresent();
     }
 
-    public boolean isFinished() {
-        int playerTerritorySize = board.determineTerritorySizeFromCell(getCurrentPlayerStartingCell());
-        int boardSize = board.determineBoardSize();
-        return playerTerritorySize >= boardSize / players.size();
+    private void currentPlayerPlays(Color color) {
+        board.changeColor(getCurrentPlayerStartingCell(), color);
+        if (!isFinished()) {
+            nextPlayer();
+        }
     }
 
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
-    Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
+    public boolean isFinished() {
+        int playerTerritorySize = board.determineTerritorySizeFromCell(getCurrentPlayerStartingCell());
+        int boardSize = board.determineBoardSize();
+        return playerTerritorySize >= boardSize / players.size();
+    }
+
+    boolean isPlayerInGame(String playerName) {
+        for (Player player : players) {
+            if (playerName.equals(player.getName()))
+                return true;
+        }
+        return false;
     }
 
     Cell getCurrentPlayerStartingCell() {
-        Player currentPlayer = getCurrentPlayer();
+        Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.getStartingCell();
     }
 
-    public int getNumberOfPlayers() {
-        return players.size();
+    public String getCurrentPlayerName() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        return currentPlayer.getName();
     }
-
-
 }

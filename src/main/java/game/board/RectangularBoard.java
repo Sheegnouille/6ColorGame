@@ -29,6 +29,7 @@ public class RectangularBoard implements Board {
         populatePossibleStartingCell(dimension);
     }
 
+    //TODO move displaying methods
     public void show() {
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
@@ -39,31 +40,6 @@ public class RectangularBoard implements Board {
             printer.returnLine();
         }
         printer.returnLine();
-    }
-
-    private void populatePossibleStartingCell(Dimension dimension) {
-        Position topLeft = aPosition()
-                .withColumn(0)
-                .withRow(0).build();
-        Position bottomRight = aPosition()
-                .withColumn(dimension.getWidth() - 1)
-                .withRow(dimension.getHeight() - 1).build();
-        Position topRight = aPosition()
-                .withColumn(dimension.getWidth() - 1)
-                .withRow(0).build();
-        Position bottomLeft = aPosition()
-                .withColumn(0)
-                .withRow(dimension.getHeight() - 1).build();
-
-        addStartingCell(dimension, topLeft);
-        addStartingCell(dimension, bottomRight);
-        addStartingCell(dimension, topRight);
-        addStartingCell(dimension, bottomLeft);
-    }
-
-    private void addStartingCell(Dimension dimension, Position position) {
-        int topLeftCellIndex = position.transformIntoIndex(dimension);
-        possibleStartingCells.add(cells.get(topLeftCellIndex));
     }
 
     @Override
@@ -89,6 +65,31 @@ public class RectangularBoard implements Board {
     @Override
     public int determineBoardSize() {
         return cells.size();
+    }
+
+    private void populatePossibleStartingCell(Dimension dimension) {
+        Position topLeft = aPosition()
+                .withColumn(0)
+                .withRow(0).build();
+        Position bottomRight = aPosition()
+                .withColumn(dimension.getWidth() - 1)
+                .withRow(dimension.getHeight() - 1).build();
+        Position topRight = aPosition()
+                .withColumn(dimension.getWidth() - 1)
+                .withRow(0).build();
+        Position bottomLeft = aPosition()
+                .withColumn(0)
+                .withRow(dimension.getHeight() - 1).build();
+
+        addStartingCell(dimension, topLeft);
+        addStartingCell(dimension, bottomRight);
+        addStartingCell(dimension, topRight);
+        addStartingCell(dimension, bottomLeft);
+    }
+
+    private void addStartingCell(Dimension dimension, Position position) {
+        int topLeftCellIndex = position.transformIntoIndex(dimension);
+        possibleStartingCells.add(cells.get(topLeftCellIndex));
     }
 
     List<Cell> determineTerritory(Cell cell) {
