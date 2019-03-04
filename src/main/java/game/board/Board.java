@@ -17,4 +17,12 @@ public interface Board {
     int determineBoardSize();
 
     Color determineColorToPlayGreedy(Cell referenceCell, List<Color> possibleColors);
+
+    Color determineColorToPlaySlow(Cell referenceCell, List<Color> possibleColors);
+
+    Color determineColorToPlayAnnoying(List<Color> possibleColors);
+
+    Color determineColorToPlaySmart(Cell referenceCell, List<Color> possibleColors);
+
+    Color determineColorToPlayRandom(List<Color> possibleColors);
 }

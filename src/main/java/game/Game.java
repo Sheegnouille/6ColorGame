@@ -71,7 +71,7 @@ public class Game {
     }
 
     public void computerPlays() {
-        Color color = board.determineColorToPlayGreedy(getCurrentPlayerStartingCell(), determineAvailableColors());
+        Color color = board.determineColorToPlaySmart(getCurrentPlayerStartingCell(), determineAvailableColors());
         currentPlayerPlays(color);
     }
 

@@ -72,6 +72,15 @@ public final class RectangularBoard implements Board {
         return territory.size();
     }
 
+    private int determineHypotheticalTerritorySize(Cell referenceCell, Color color) {
+        RectangularBoard tempBoard = RectangularBoard.copyInstance(this);
+        Cell tempCell = Cell.copyInstance(referenceCell);
+        tempBoard.changeColor(tempCell, color);
+        tempCell.changeColor(color);
+
+        return tempBoard.determineTerritorySizeFromCell(tempCell);
+    }
+
     @Override
     public int determineBoardSize() {
         return cells.size();
@@ -83,18 +92,62 @@ public final class RectangularBoard implements Board {
         int territorySizeForBestColor = 0;
 
         for (Color color : possibleColors) {
-            RectangularBoard tempBoard = RectangularBoard.copyInstance(this);
-            Cell tempCell = Cell.copyInstance(referenceCell);
-            tempBoard.changeColor(tempCell, color);
-            tempCell.changeColor(color);
-
-            int territorySize = tempBoard.determineTerritorySizeFromCell(tempCell);
+            int territorySize = determineHypotheticalTerritorySize(referenceCell, color);
             if (territorySize > territorySizeForBestColor) {
                 territorySizeForBestColor = territorySize;
                 bestColor = color;
             }
         }
         return bestColor;
+    }
+
+    @Override
+    public Color determineColorToPlaySlow(Cell referenceCell, List<Color> possibleColors) {
+        Color worstColor = possibleColors.get(0);
+        int baseTerritorySize = determineTerritorySizeFromCell(referenceCell);
+        int territorySizeForWorstColor = cells.size();
+
+        for (Color color : possibleColors) {
+            int territorySize = determineHypotheticalTerritorySize(referenceCell, color);
+            if (territorySize > baseTerritorySize && territorySize < territorySizeForWorstColor) {
+                territorySizeForWorstColor = territorySize;
+                worstColor = color;
+            }
+        }
+        return worstColor;
+    }
+
+    @Override
+    public Color determineColorToPlayAnnoying(List<Color> possibleColors) {
+        return determineColorToPlayGreedy(cells.get(0), possibleColors);
+    }
+
+    @Override
+    public Color determineColorToPlaySmart(Cell referenceCell, List<Color> possibleColors) {
+        int baseTerritorySize = determineTerritorySizeFromCell(referenceCell);
+
+        Color greedyColor = determineColorToPlayGreedy(referenceCell, possibleColors);
+        int territorySizeIfGreedy = determineHypotheticalTerritorySize(referenceCell, greedyColor);
+        int gainForGreedyColor = territorySizeIfGreedy - baseTerritorySize;
+
+        Color annoyingColor = determineColorToPlayAnnoying(possibleColors);
+        int territorySizeIfAnnoying = determineHypotheticalTerritorySize(referenceCell, annoyingColor);
+        int gainForAnnoyingColor = territorySizeIfAnnoying - baseTerritorySize;
+
+        Cell firstCell = cells.get(0);
+        int territorySizeOfOtherPlayer = determineHypotheticalTerritorySize(firstCell, annoyingColor);
+        int gainForOtherPlayerIfGreedy = territorySizeOfOtherPlayer - determineTerritorySizeFromCell(firstCell);
+
+        return gainForGreedyColor - gainForAnnoyingColor > gainForOtherPlayerIfGreedy
+                ? greedyColor
+                : annoyingColor;
+    }
+
+    @Override
+    public Color determineColorToPlayRandom(List<Color> possibleColors) {
+        Random random = new Random();
+        int randomColorIndex = random.nextInt(possibleColors.size());
+        return possibleColors.get(randomColorIndex);
     }
 
     private void populatePossibleStartingCell(Dimension dimension) {
