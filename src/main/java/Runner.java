@@ -19,12 +19,12 @@ class Runner {
     }
 
     private static void run(Game game) {
-        Scanner scanner = new Scanner(System.in);
         while (!game.isFinished()) {
-            askColor(game);
-            String chosenColor = scanner.nextLine().toUpperCase();
-            if (!Color.exists(chosenColor) || !game.currentPlayerChooseColor(Color.valueOf(chosenColor))) {
-                System.out.println("Color not available");
+            game.showBoard();
+            if (game.currentPlayerIsHuman()) {
+                askColor(game);
+            } else {
+                game.computerPlays();
             }
         }
         System.out.println(" ");
@@ -44,6 +44,10 @@ class Runner {
             System.out.println("Player " + playerId + " name :");
             game.addPlayer(scanner.nextLine());
         }
+
+        if (requestedNumberOfPlayers == 1) {
+            game.addComputer("GLaDOS");
+        }
     }
 
     private static Game initGameWithBoardDimensionFromInput() {
@@ -61,17 +65,20 @@ class Runner {
     }
 
     private static void askColor(Game game) {
-        game.showBoard();
-        System.out.print(game.getCurrentPlayerName() + " : Choose color (Available colors : ");
+        System.out.print(game.getCurrentPlayerName() + game.getCurrentPlayerStartingCell() +  " : Choose color (Available colors : ");
         List<Color> availableColors = game.determineAvailableColors();
         availableColors.forEach(color -> System.out.print(color.toString()));
         System.out.println(")");
+
+        Scanner scanner = new Scanner(System.in);
+        String chosenColor = scanner.nextLine().toUpperCase();
+        if (!Color.exists(chosenColor) || !game.currentPlayerChooseColor(Color.valueOf(chosenColor))) {
+            System.out.println("Color not available");
+        }
     }
 
     private static void displayScores(Game game) {
         Map<Player, Integer> scoresByPlayer = game.getScoresByPlayer();
-        for (Player player : scoresByPlayer.keySet()) {
-            System.out.println(player + "Score : " + scoresByPlayer.get(player));
-        }
+        scoresByPlayer.keySet().forEach(player -> System.out.println(player + "Score : " + scoresByPlayer.get(player)));
     }
 }

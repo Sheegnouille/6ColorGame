@@ -31,7 +31,13 @@ public class Game {
 
     public void addPlayer(String playerName) {
         Cell startingCell = board.provideFreeStartingCell();
-        Player player = new Player(playerName, startingCell);
+        Player player = new Player(playerName, startingCell, true);
+        players.add(player);
+    }
+
+    public void addComputer(String computerName) {
+        Cell startingCell = board.provideFreeStartingCell();
+        Player player = new Player(computerName, startingCell, false);
         players.add(player);
     }
 
@@ -64,6 +70,11 @@ public class Game {
         }
     }
 
+    public void computerPlays() {
+        Color color = board.determineColorToPlayGreedy(getCurrentPlayerStartingCell(), determineAvailableColors());
+        currentPlayerPlays(color);
+    }
+
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
@@ -82,7 +93,7 @@ public class Game {
         return false;
     }
 
-    Cell getCurrentPlayerStartingCell() {
+    public Cell getCurrentPlayerStartingCell() {
         Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.getStartingCell();
     }
@@ -90,5 +101,10 @@ public class Game {
     public String getCurrentPlayerName() {
         Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.getName();
+    }
+
+    public boolean currentPlayerIsHuman() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        return currentPlayer.isHuman();
     }
 }

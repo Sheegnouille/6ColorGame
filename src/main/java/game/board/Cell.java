@@ -14,6 +14,10 @@ public class Cell {
         this.color = color;
     }
 
+    static Cell copyInstance(Cell cell) {
+        return new Cell(cell.position, cell.color);
+    }
+
     boolean isSameColor(Cell otherCell) {
         return this.color.equals(otherCell.color);
     }
@@ -32,6 +36,10 @@ public class Cell {
 
     public boolean isOfColor(Color color) {
         return this.color == color;
+    }
+
+    String showColor() {
+        return color.toString();
     }
 
     @Override
@@ -53,9 +61,5 @@ public class Cell {
     @Override
     public int hashCode() {
         return Objects.hash(position, color);
-    }
-
-    String showColor() {
-        return color.toString();
     }
 }

@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 
 import static game.board.Position.PositionBuilder.aPosition;
 
-public class RectangularBoard implements Board {
+public final class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
     private final Dimension dimension;
     private final Printer printer;
-    private Queue<Cell> possibleStartingCells = new LinkedList<>();
+    private final Queue<Cell> possibleStartingCells = new LinkedList<>();
 
     public RectangularBoard(Dimension dimension, ColorGenerator colorGenerator, Printer printer) {
         this.dimension = dimension;
@@ -27,6 +27,16 @@ public class RectangularBoard implements Board {
             }
         }
         populatePossibleStartingCell(dimension);
+    }
+
+    private RectangularBoard(Dimension dimension, List<Cell> cells, Printer printer) {
+        this.dimension = dimension;
+        this.printer = printer;
+        this.cells.addAll(cells.stream().map(Cell::copyInstance).collect(Collectors.toList()));
+    }
+
+    private static RectangularBoard copyInstance(RectangularBoard board) {
+        return new RectangularBoard(board.dimension, board.cells, board.printer);
     }
 
     //TODO move displaying methods
@@ -65,6 +75,26 @@ public class RectangularBoard implements Board {
     @Override
     public int determineBoardSize() {
         return cells.size();
+    }
+
+    @Override
+    public Color determineColorToPlayGreedy(Cell referenceCell, List<Color> possibleColors) {
+        Color bestColor = possibleColors.get(0);
+        int territorySizeForBestColor = 0;
+
+        for (Color color : possibleColors) {
+            RectangularBoard tempBoard = RectangularBoard.copyInstance(this);
+            Cell tempCell = Cell.copyInstance(referenceCell);
+            tempBoard.changeColor(tempCell, color);
+            tempCell.changeColor(color);
+
+            int territorySize = tempBoard.determineTerritorySizeFromCell(tempCell);
+            if (territorySize > territorySizeForBestColor) {
+                territorySizeForBestColor = territorySize;
+                bestColor = color;
+            }
+        }
+        return bestColor;
     }
 
     private void populatePossibleStartingCell(Dimension dimension) {

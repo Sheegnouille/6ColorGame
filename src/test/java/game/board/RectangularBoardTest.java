@@ -1,7 +1,10 @@
 package game.board;
 
+import game.color.Color;
 import game.color.ColorGeneratorFake;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 import static game.board.Position.PositionBuilder.aPosition;
 import static game.board.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
@@ -203,5 +206,43 @@ public class RectangularBoardTest {
         board.provideFreeStartingCell();
 
         assertThat(board.provideFreeStartingCell()).isEqualTo(secondCell);
+    }
+
+    @Test
+    public void computer_determines_best_color_to_play() {
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(2)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(
+                        RED, BLUE,
+                        BLUE, BLUE
+                ))
+                .build();
+
+        Cell topLeft = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
+        Color colorChoseByTheComputer = board.determineColorToPlayGreedy(topLeft, Arrays.asList(Color.values()));
+
+        assertThat(colorChoseByTheComputer).isEqualTo(BLUE);
+    }
+
+    @Test
+    public void computer_has_a_territory_of_5_after_playing() {
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(3)
+                .withHeight(3)
+                .withColorGenerator(new ColorGeneratorFake(
+                        BLUE, BLUE, BLUE,
+                        GREEN, RED, GREEN,
+                        GREEN, GREEN, RED
+                ))
+                .build();
+
+        Cell centerCell = new Cell(aPosition().withColumn(1).withRow(1).build(), RED);
+        Color colorChoseByTheComputer = board.determineColorToPlayGreedy(centerCell, Arrays.asList(Color.values()));
+        board.changeColor(centerCell, colorChoseByTheComputer);
+        centerCell.changeColor(colorChoseByTheComputer);
+
+        board.show();
+        assertThat(board.determineTerritorySizeFromCell(centerCell)).isEqualTo(5);
     }
 }

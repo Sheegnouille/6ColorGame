@@ -2,6 +2,8 @@ package game.board;
 
 import game.color.Color;
 
+import java.util.List;
+
 public interface Board {
 
     void show();
@@ -13,4 +15,6 @@ public interface Board {
     int determineTerritorySizeFromCell(Cell cell);
 
     int determineBoardSize();
+
+    Color determineColorToPlayGreedy(Cell referenceCell, List<Color> possibleColors);
 }

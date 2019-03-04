@@ -8,10 +8,12 @@ public final class Player {
 
     private final String name;
     private final Cell startingCell;
+    private final boolean human;
 
-    Player(String playerName, Cell startingCell) {
+    Player(String playerName, Cell startingCell, boolean human) {
         this.name = playerName;
         this.startingCell = startingCell;
+        this.human = human;
     }
 
     String getName() {
@@ -20,6 +22,10 @@ public final class Player {
 
     Cell getStartingCell() {
         return startingCell;
+    }
+
+    boolean isHuman() {
+        return human;
     }
 
     @Override
