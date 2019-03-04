@@ -22,7 +22,7 @@ public class RectangularBoard implements Board {
         this.printer = printer;
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
-                Cell cellToAdd = new Cell(new Position(column, row), colorGenerator.getRandomColor());
+                Cell cellToAdd = new Cell(new Position(column, row), colorGenerator.getNextColor());
                 cells.add(cellToAdd);
             }
         }

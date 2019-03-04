@@ -8,7 +8,7 @@ public class ColorGeneratorRandom implements ColorGenerator {
     private final Color[] colorValues = Color.values();
 
     @Override
-    public Color getRandomColor() {
+    public Color getNextColor() {
         int randomIndex = random.nextInt(colorValues.length);
         return colorValues[randomIndex];
     }
