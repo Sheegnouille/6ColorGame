@@ -1,4 +1,4 @@
-package game;
+package game.color;
 
 public class ColorGeneratorFake implements ColorGenerator {
 
@@ -11,7 +11,7 @@ public class ColorGeneratorFake implements ColorGenerator {
     }
 
     @Override
-    public Color getRandomColor() {
+    public Color getNextColor() {
         return colors[i++ % colors.length];
     }
 }

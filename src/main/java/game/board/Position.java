@@ -1,8 +1,8 @@
-package game;
+package game.board;
 
 import java.util.Objects;
 
-final class Position {
+public final class Position {
     private final int row;
     private final int col;
 
@@ -37,9 +37,8 @@ final class Position {
 
     @Override
     public String toString() {
-        return "Position{" +
-                "\nrow=" + row +
-                ", \ncol=" + col +
+        return "{" + row +
+                ", " + col +
                 '}';
     }
 
@@ -57,28 +56,28 @@ final class Position {
         return Objects.hash(row, col);
     }
 
-    static final class PositionBuilder {
+    public static final class PositionBuilder {
         private int row;
         private int col;
 
         private PositionBuilder() {
         }
 
-        static PositionBuilder aPosition() {
+        public static PositionBuilder aPosition() {
             return new PositionBuilder();
         }
 
-        PositionBuilder withRow(int row) {
+        public PositionBuilder withRow(int row) {
             this.row = row;
             return this;
         }
 
-        PositionBuilder withColumn(int col) {
+        public PositionBuilder withColumn(int col) {
             this.col = col;
             return this;
         }
 
-        Position build() {
+        public Position build() {
             return new Position(col, row);
         }
     }

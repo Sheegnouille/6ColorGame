@@ -1,13 +1,16 @@
 package game;
 
+import game.board.Board;
+import game.board.Cell;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static game.Color.BLUE;
-import static game.Color.RED;
-import static game.Position.PositionBuilder.aPosition;
+import static game.board.Position.PositionBuilder.aPosition;
+import static game.color.Color.BLUE;
+import static game.color.Color.RED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -23,6 +26,8 @@ public class GameTest {
         game = new Game(board);
         startingCell = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
         when(board.provideFreeStartingCell()).thenReturn(startingCell);
+        when(board.determineBoardSize()).thenReturn(100);
+        when(board.determineTerritorySizeFromCell(startingCell)).thenReturn(0);
     }
 
     @Test
@@ -46,7 +51,7 @@ public class GameTest {
     public void current_player_is_the_only_player() {
         game.addPlayer("Toto");
 
-        assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
+        assertThat(game.isPlayerInGame("Toto")).isTrue();
     }
 
     @Test
@@ -54,7 +59,7 @@ public class GameTest {
         game.addPlayer("Toto");
         game.addPlayer("Titi");
 
-        assertThat(game.getCurrentPlayer().hasName("Toto")).isTrue();
+        assertThat(game.isPlayerInGame("Toto")).isTrue();
     }
 
     @Test
@@ -64,8 +69,7 @@ public class GameTest {
 
         game.currentPlayerChooseColor(BLUE);
 
-        Player currentPlayer = game.getCurrentPlayer();
-        assertThat(currentPlayer.hasName("Titi")).isTrue();
+        assertThat(game.isPlayerInGame("Titi")).isTrue();
     }
 
     @Test
@@ -74,41 +78,30 @@ public class GameTest {
 
         game.currentPlayerChooseColor(RED);
 
-        Player currentPlayer = game.getCurrentPlayer();
-        assertThat(currentPlayer.hasName("Toto")).isTrue();
+        assertThat(game.isPlayerInGame("Toto")).isTrue();
     }
 
     @Test
-    public void new_player_has_score_of_1() {
+    public void is_finished_when_one_player_has_dominant_territory() {
         game.addPlayer("toto");
-        when(board.determineTerritorySizeFromCell(startingCell)).thenReturn(1);
-
-        Score currentPlayerScore = game.calculateCurrentPlayerScore();
-
-        assertThat(currentPlayerScore).isEqualTo(Score.valueOf(1));
-        verify(board).determineTerritorySizeFromCell(startingCell);
-    }
-
-    @Test
-    public void territory_dominant_should_finish_game() {
-        game.addPlayer("toto");
-        when(board.isTerritoryDominant(startingCell)).thenReturn(true);
+        when(board.determineTerritorySizeFromCell(startingCell)).thenReturn(100);
 
         boolean finished = game.isFinished();
 
         assertThat(finished).isTrue();
-        verify(board).isTerritoryDominant(startingCell);
+        verify(board).determineBoardSize();
+        verify(board).determineTerritorySizeFromCell(startingCell);
     }
 
     @Test
     public void territory_not_dominant_should_not_finish_game() {
         game.addPlayer("toto");
-        when(board.isTerritoryDominant(startingCell)).thenReturn(false);
 
         boolean finished = game.isFinished();
 
         assertThat(finished).isFalse();
-        verify(board).isTerritoryDominant(startingCell);
+        verify(board).determineBoardSize();
+        verify(board).determineTerritorySizeFromCell(startingCell);
     }
 
     @Test
@@ -132,5 +125,21 @@ public class GameTest {
         game.currentPlayerChooseColor(RED);
         boolean canPlayerChooseColor = game.currentPlayerChooseColor(RED);
         assertThat(canPlayerChooseColor).isFalse();
+    }
+
+    @Test
+    public void name() {
+        when(board.determineBoardSize()).thenReturn(64);
+        when(board.determineTerritorySizeFromCell(Mockito.any())).thenReturn(16);
+        game.addPlayer("Toto");
+        game.addPlayer("Tata");
+        game.addPlayer("Titi");
+        game.addPlayer("Tutu");
+
+        boolean finished = game.isFinished();
+
+        assertThat(finished).isTrue();
+        verify(board).determineBoardSize();
+        verify(board).determineTerritorySizeFromCell(Mockito.any());
     }
 }

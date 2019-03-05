@@ -1,23 +1,31 @@
 package game;
 
+import game.board.Cell;
+
 import java.util.Objects;
 
 public final class Player {
 
     private final String name;
     private final Cell startingCell;
+    private final boolean human;
 
-    Player(String playerName, Cell startingCell) {
+    Player(String playerName, Cell startingCell, boolean human) {
         this.name = playerName;
         this.startingCell = startingCell;
+        this.human = human;
+    }
+
+    String getName() {
+        return name;
     }
 
     Cell getStartingCell() {
         return startingCell;
     }
 
-    boolean hasName(String name) {
-        return name.equals(this.name);
+    boolean isHuman() {
+        return human;
     }
 
     @Override
@@ -37,6 +45,6 @@ public final class Player {
     @Override
     public String toString() {
         return "Player name: " + name +
-                ", \nstarting cell: " + startingCell;
+                " " + startingCell;
     }
 }

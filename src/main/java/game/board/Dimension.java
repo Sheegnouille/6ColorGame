@@ -1,4 +1,4 @@
-package game;
+package game.board;
 
 public final class Dimension {
     private final int width;

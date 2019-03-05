@@ -1,10 +1,14 @@
-package game;
+package game.board;
 
+import game.color.Color;
+import game.color.ColorGeneratorFake;
 import org.junit.Test;
 
-import static game.Color.*;
-import static game.Position.PositionBuilder.aPosition;
-import static game.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
+import java.util.Arrays;
+
+import static game.board.Position.PositionBuilder.aPosition;
+import static game.board.RectangularBoard.RectangularBoardBuilder.aRectangularBoard;
+import static game.color.Color.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RectangularBoardTest {
@@ -177,32 +181,6 @@ public class RectangularBoardTest {
     }
 
     @Test
-    public void single_cell_on_checker_pattern_board_should_not_be_dominant() {
-        Board board = aRectangularBoard()
-                .withWidth(2)
-                .withHeight(2)
-                .withColorGenerator(new ColorGeneratorFake(
-                        BLUE, RED,
-                        RED, BLUE))
-                .build();
-        Cell cell = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
-        boolean isTerritoryDominant = board.isTerritoryDominant(cell);
-        assertThat(isTerritoryDominant).isFalse();
-    }
-
-    @Test
-    public void one_color_board_should_have_dominant_territory() {
-        Board board = aRectangularBoard()
-                .withWidth(2)
-                .withHeight(2)
-                .withColorGenerator(new ColorGeneratorFake(BLUE))
-                .build();
-        Cell cell = new Cell(aPosition().withColumn(0).withRow(0).build(), BLUE);
-        boolean isTerritoryDominant = board.isTerritoryDominant(cell);
-        assertThat(isTerritoryDominant).isTrue();
-    }
-
-    @Test
     public void successive_calls_to_provideFreeStartingCell_should_return_different_cells() {
         Board board = aRectangularBoard()
                 .withHeight(2)
@@ -228,5 +206,43 @@ public class RectangularBoardTest {
         board.provideFreeStartingCell();
 
         assertThat(board.provideFreeStartingCell()).isEqualTo(secondCell);
+    }
+
+    @Test
+    public void computer_determines_best_color_to_play() {
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(2)
+                .withHeight(2)
+                .withColorGenerator(new ColorGeneratorFake(
+                        RED, BLUE,
+                        BLUE, BLUE
+                ))
+                .build();
+
+        Cell topLeft = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
+        Color colorChoseByTheComputer = board.determineColorToPlayGreedy(topLeft, Arrays.asList(Color.values()));
+
+        assertThat(colorChoseByTheComputer).isEqualTo(BLUE);
+    }
+
+    @Test
+    public void computer_has_a_territory_of_5_after_playing() {
+        RectangularBoard board = aRectangularBoard()
+                .withWidth(3)
+                .withHeight(3)
+                .withColorGenerator(new ColorGeneratorFake(
+                        BLUE, BLUE, BLUE,
+                        GREEN, RED, GREEN,
+                        GREEN, GREEN, RED
+                ))
+                .build();
+
+        Cell centerCell = new Cell(aPosition().withColumn(1).withRow(1).build(), RED);
+        Color colorChoseByTheComputer = board.determineColorToPlayGreedy(centerCell, Arrays.asList(Color.values()));
+        board.changeColor(centerCell, colorChoseByTheComputer);
+        centerCell.changeColor(colorChoseByTheComputer);
+
+        board.show();
+        assertThat(board.determineTerritorySizeFromCell(centerCell)).isEqualTo(5);
     }
 }

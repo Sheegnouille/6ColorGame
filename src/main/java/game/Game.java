@@ -1,8 +1,11 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import game.board.Board;
+import game.board.Cell;
+import game.color.Color;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -14,9 +17,27 @@ public class Game {
         this.board = board;
     }
 
+    public void showBoard() {
+        board.show();
+    }
+
+    public Map<Player, Integer> getScoresByPlayer() {
+        Map<Player, Integer> scoresByPlayer = new HashMap<>();
+        for (Player player : players) {
+            scoresByPlayer.put(player, board.determineTerritorySizeFromCell(player.getStartingCell()));
+        }
+        return scoresByPlayer;
+    }
+
     public void addPlayer(String playerName) {
         Cell startingCell = board.provideFreeStartingCell();
-        Player player = new Player(playerName, startingCell);
+        Player player = new Player(playerName, startingCell, true);
+        players.add(player);
+    }
+
+    public void addComputer(String computerName) {
+        Cell startingCell = board.provideFreeStartingCell();
+        Player player = new Player(computerName, startingCell, false);
         players.add(player);
     }
 
@@ -28,9 +49,10 @@ public class Game {
         return true;
     }
 
-    private void currentPlayerPlays(Color color) {
-        board.changeColor(getCurrentPlayerStartingCell(), color);
-        nextPlayer();
+    public List<Color> determineAvailableColors() {
+        return Arrays.stream(Color.values())
+                .filter(this::isColorAvailable)
+                .collect(Collectors.toList());
     }
 
     private boolean isColorAvailable(Color color) {
@@ -41,29 +63,48 @@ public class Game {
         return !sameColorCell.isPresent();
     }
 
-    public boolean isFinished() {
-        Optional<Player> winner = players.stream().filter(
-                player -> board.isTerritoryDominant(player.getStartingCell())
-        ).findFirst();
-        return winner.isPresent();
+    private void currentPlayerPlays(Color color) {
+        board.changeColor(getCurrentPlayerStartingCell(), color);
+        if (!isFinished()) {
+            nextPlayer();
+        }
+    }
+
+    public void computerPlays() {
+        Color color = board.determineColorToPlaySmart(getCurrentPlayerStartingCell(), determineAvailableColors());
+        currentPlayerPlays(color);
     }
 
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
-    Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
+    public boolean isFinished() {
+        int playerTerritorySize = board.determineTerritorySizeFromCell(getCurrentPlayerStartingCell());
+        int boardSize = board.determineBoardSize();
+        return playerTerritorySize >= boardSize / players.size();
     }
 
-    Cell getCurrentPlayerStartingCell() {
-        Player currentPlayer = getCurrentPlayer();
+    boolean isPlayerInGame(String playerName) {
+        for (Player player : players) {
+            if (playerName.equals(player.getName()))
+                return true;
+        }
+        return false;
+    }
+
+    public Cell getCurrentPlayerStartingCell() {
+        Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.getStartingCell();
     }
 
-    Score calculateCurrentPlayerScore() {
-        Player currentPlayer = getCurrentPlayer();
-        Cell startingCell = currentPlayer.getStartingCell();
-        return Score.valueOf(board.determineTerritorySizeFromCell(startingCell));
+    public String getCurrentPlayerName() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        return currentPlayer.getName();
+    }
+
+    public boolean currentPlayerIsHuman() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        return currentPlayer.isHuman();
     }
 }
