@@ -1,16 +1,16 @@
-package game;
+package domain.game;
 
-import game.board.Board;
-import game.board.Cell;
+import domain.board.Board;
+import domain.board.Cell;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static game.board.Position.PositionBuilder.aPosition;
-import static game.color.Color.BLUE;
-import static game.color.Color.RED;
+import static domain.board.Position.PositionBuilder.aPosition;
+import static domain.color.Color.BLUE;
+import static domain.color.Color.RED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -26,7 +26,7 @@ public class GameTest {
         game = new Game(board);
         startingCell = new Cell(aPosition().withColumn(0).withRow(0).build(), RED);
         when(board.provideFreeStartingCell()).thenReturn(startingCell);
-        when(board.determineBoardSize()).thenReturn(100);
+        when(board.getBoardSize()).thenReturn(100);
         when(board.determineTerritorySizeFromCell(startingCell)).thenReturn(0);
     }
 
@@ -89,7 +89,7 @@ public class GameTest {
         boolean finished = game.isFinished();
 
         assertThat(finished).isTrue();
-        verify(board).determineBoardSize();
+        verify(board).getBoardSize();
         verify(board).determineTerritorySizeFromCell(startingCell);
     }
 
@@ -100,7 +100,7 @@ public class GameTest {
         boolean finished = game.isFinished();
 
         assertThat(finished).isFalse();
-        verify(board).determineBoardSize();
+        verify(board).getBoardSize();
         verify(board).determineTerritorySizeFromCell(startingCell);
     }
 
@@ -129,7 +129,7 @@ public class GameTest {
 
     @Test
     public void name() {
-        when(board.determineBoardSize()).thenReturn(64);
+        when(board.getBoardSize()).thenReturn(64);
         when(board.determineTerritorySizeFromCell(Mockito.any())).thenReturn(16);
         game.addPlayer("Toto");
         game.addPlayer("Tata");
@@ -139,7 +139,7 @@ public class GameTest {
         boolean finished = game.isFinished();
 
         assertThat(finished).isTrue();
-        verify(board).determineBoardSize();
+        verify(board).getBoardSize();
         verify(board).determineTerritorySizeFromCell(Mockito.any());
     }
 }

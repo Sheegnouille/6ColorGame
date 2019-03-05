@@ -1,6 +1,6 @@
-package game.board;
+package domain.board;
 
-import game.color.Color;
+import domain.color.Color;
 
 import java.util.Objects;
 

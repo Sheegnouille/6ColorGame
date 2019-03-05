@@ -1,6 +1,6 @@
-package game;
+package domain.game;
 
-import game.board.Cell;
+import domain.board.Cell;
 
 import java.util.Objects;
 

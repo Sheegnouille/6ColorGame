@@ -1,14 +1,14 @@
-package game.board;
+package domain.board;
 
-import game.ConsolePrinter;
-import game.Printer;
-import game.color.Color;
-import game.color.ColorGenerator;
+import domain.ConsolePrinter;
+import domain.Printer;
+import domain.color.Color;
+import domain.color.ColorGenerator;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static game.board.Position.PositionBuilder.aPosition;
+import static domain.board.Position.PositionBuilder.aPosition;
 
 public final class RectangularBoard implements Board {
 
@@ -35,17 +35,13 @@ public final class RectangularBoard implements Board {
         this.cells.addAll(cells.stream().map(Cell::copyInstance).collect(Collectors.toList()));
     }
 
-    private static RectangularBoard copyInstance(RectangularBoard board) {
-        return new RectangularBoard(board.dimension, board.cells, board.printer);
-    }
-
     //TODO move displaying methods
     public void show() {
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Position position = new Position(column, row);
                 Cell cell = cells.get(position.transformIntoIndex(dimension));
-                printer.printCell(cell.showColor());
+                printer.printText(cell.showColor());
             }
             printer.returnLine();
         }
@@ -62,18 +58,14 @@ public final class RectangularBoard implements Board {
     }
 
     @Override
-    public Cell provideFreeStartingCell() {
-        return possibleStartingCells.poll();
-    }
-
-    @Override
-    public int determineTerritorySizeFromCell(Cell cell) {
-        List<Cell> territory = determineTerritory(cell);
+    public int determineTerritorySizeFromCell(Cell referenceCell) {
+        List<Cell> territory = determineTerritory(referenceCell);
         return territory.size();
     }
 
-    private int determineHypotheticalTerritorySize(Cell referenceCell, Color color) {
-        RectangularBoard tempBoard = RectangularBoard.copyInstance(this);
+    @Override
+    public int determineHypotheticalTerritorySize(Cell referenceCell, Color color) {
+        RectangularBoard tempBoard = new RectangularBoard(this.dimension, this.cells, this.printer);
         Cell tempCell = Cell.copyInstance(referenceCell);
         tempBoard.changeColor(tempCell, color);
         tempCell.changeColor(color);
@@ -82,72 +74,24 @@ public final class RectangularBoard implements Board {
     }
 
     @Override
-    public int determineBoardSize() {
+    public Cell provideFreeStartingCell() {
+        return possibleStartingCells.poll();
+    }
+
+    @Override
+    public int getBoardSize() {
         return cells.size();
     }
 
-    @Override
-    public Color determineColorToPlayGreedy(Cell referenceCell, List<Color> possibleColors) {
-        Color bestColor = possibleColors.get(0);
-        int territorySizeForBestColor = 0;
+    public Cell getFirstCell() {
+        return cells.get(0);
+    }
 
-        for (Color color : possibleColors) {
-            int territorySize = determineHypotheticalTerritorySize(referenceCell, color);
-            if (territorySize > territorySizeForBestColor) {
-                territorySizeForBestColor = territorySize;
-                bestColor = color;
-            }
+    List<Cell> determineTerritory(Cell cell) {
+        if (!cells.contains(cell)) {
+            return new ArrayList<>();
         }
-        return bestColor;
-    }
-
-    @Override
-    public Color determineColorToPlaySlow(Cell referenceCell, List<Color> possibleColors) {
-        Color worstColor = possibleColors.get(0);
-        int baseTerritorySize = determineTerritorySizeFromCell(referenceCell);
-        int territorySizeForWorstColor = cells.size();
-
-        for (Color color : possibleColors) {
-            int territorySize = determineHypotheticalTerritorySize(referenceCell, color);
-            if (territorySize > baseTerritorySize && territorySize < territorySizeForWorstColor) {
-                territorySizeForWorstColor = territorySize;
-                worstColor = color;
-            }
-        }
-        return worstColor;
-    }
-
-    @Override
-    public Color determineColorToPlayAnnoying(List<Color> possibleColors) {
-        return determineColorToPlayGreedy(cells.get(0), possibleColors);
-    }
-
-    @Override
-    public Color determineColorToPlaySmart(Cell referenceCell, List<Color> possibleColors) {
-        int baseTerritorySize = determineTerritorySizeFromCell(referenceCell);
-
-        Color greedyColor = determineColorToPlayGreedy(referenceCell, possibleColors);
-        int territorySizeIfGreedy = determineHypotheticalTerritorySize(referenceCell, greedyColor);
-        int gainForGreedyColor = territorySizeIfGreedy - baseTerritorySize;
-
-        Color annoyingColor = determineColorToPlayAnnoying(possibleColors);
-        int territorySizeIfAnnoying = determineHypotheticalTerritorySize(referenceCell, annoyingColor);
-        int gainForAnnoyingColor = territorySizeIfAnnoying - baseTerritorySize;
-
-        Cell firstCell = cells.get(0);
-        int territorySizeOfOtherPlayer = determineHypotheticalTerritorySize(firstCell, annoyingColor);
-        int gainForOtherPlayerIfGreedy = territorySizeOfOtherPlayer - determineTerritorySizeFromCell(firstCell);
-
-        return gainForGreedyColor - gainForAnnoyingColor > gainForOtherPlayerIfGreedy
-                ? greedyColor
-                : annoyingColor;
-    }
-
-    @Override
-    public Color determineColorToPlayRandom(List<Color> possibleColors) {
-        Random random = new Random();
-        int randomColorIndex = random.nextInt(possibleColors.size());
-        return possibleColors.get(randomColorIndex);
+        return new ArrayList<>(computeContiguousColor(cell));
     }
 
     private void populatePossibleStartingCell(Dimension dimension) {
@@ -173,13 +117,6 @@ public final class RectangularBoard implements Board {
     private void addStartingCell(Dimension dimension, Position position) {
         int topLeftCellIndex = position.transformIntoIndex(dimension);
         possibleStartingCells.add(cells.get(topLeftCellIndex));
-    }
-
-    List<Cell> determineTerritory(Cell cell) {
-        if (!cells.contains(cell)) {
-            return new ArrayList<>();
-        }
-        return new ArrayList<>(computeContiguousColor(cell));
     }
 
     private Set<Cell> computeContiguousColor(Cell cell) {

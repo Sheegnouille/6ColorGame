@@ -1,11 +1,11 @@
-import game.ConsolePrinter;
-import game.Game;
-import game.Player;
-import game.board.Board;
-import game.board.Dimension;
-import game.board.RectangularBoard;
-import game.color.Color;
-import game.color.ColorGeneratorRandom;
+package domain.game;
+
+import domain.ConsolePrinter;
+import domain.board.Board;
+import domain.board.Dimension;
+import domain.board.RectangularBoard;
+import domain.color.Color;
+import domain.color.ColorGeneratorRandom;
 
 import java.util.List;
 import java.util.Map;

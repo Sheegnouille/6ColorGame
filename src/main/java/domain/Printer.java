@@ -1,8 +1,8 @@
-package game;
+package domain;
 
 public interface Printer {
 
-    void printCell(String cell);
+    void printText(String text);
 
     void returnLine();
 }

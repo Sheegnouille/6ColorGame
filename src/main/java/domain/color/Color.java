@@ -1,4 +1,4 @@
-package game.color;
+package domain.color;
 
 import java.util.stream.Stream;
 

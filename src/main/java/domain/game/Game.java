@@ -1,8 +1,8 @@
-package game;
+package domain.game;
 
-import game.board.Board;
-import game.board.Cell;
-import game.color.Color;
+import domain.board.Board;
+import domain.board.Cell;
+import domain.color.Color;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,11 +17,11 @@ public class Game {
         this.board = board;
     }
 
-    public void showBoard() {
+    void showBoard() {
         board.show();
     }
 
-    public Map<Player, Integer> getScoresByPlayer() {
+    Map<Player, Integer> getScoresByPlayer() {
         Map<Player, Integer> scoresByPlayer = new HashMap<>();
         for (Player player : players) {
             scoresByPlayer.put(player, board.determineTerritorySizeFromCell(player.getStartingCell()));
@@ -35,7 +35,7 @@ public class Game {
         players.add(player);
     }
 
-    public void addComputer(String computerName) {
+    void addComputer(String computerName) {
         Cell startingCell = board.provideFreeStartingCell();
         Player player = new Player(computerName, startingCell, false);
         players.add(player);
@@ -49,7 +49,7 @@ public class Game {
         return true;
     }
 
-    public List<Color> determineAvailableColors() {
+    List<Color> determineAvailableColors() {
         return Arrays.stream(Color.values())
                 .filter(this::isColorAvailable)
                 .collect(Collectors.toList());
@@ -70,8 +70,8 @@ public class Game {
         }
     }
 
-    public void computerPlays() {
-        Color color = board.determineColorToPlaySmart(getCurrentPlayerStartingCell(), determineAvailableColors());
+    void computerPlays() {
+        Color color = AI.determineColorToPlaySmart(board, getCurrentPlayerStartingCell(), determineAvailableColors());
         currentPlayerPlays(color);
     }
 
@@ -81,7 +81,7 @@ public class Game {
 
     public boolean isFinished() {
         int playerTerritorySize = board.determineTerritorySizeFromCell(getCurrentPlayerStartingCell());
-        int boardSize = board.determineBoardSize();
+        int boardSize = board.getBoardSize();
         return playerTerritorySize >= boardSize / players.size();
     }
 
@@ -93,17 +93,17 @@ public class Game {
         return false;
     }
 
-    public Cell getCurrentPlayerStartingCell() {
+    Cell getCurrentPlayerStartingCell() {
         Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.getStartingCell();
     }
 
-    public String getCurrentPlayerName() {
+    String getCurrentPlayerName() {
         Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.getName();
     }
 
-    public boolean currentPlayerIsHuman() {
+    boolean currentPlayerIsHuman() {
         Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer.isHuman();
     }

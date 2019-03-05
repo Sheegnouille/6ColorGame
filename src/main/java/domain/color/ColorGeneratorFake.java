@@ -1,4 +1,4 @@
-package game.color;
+package domain.color;
 
 public class ColorGeneratorFake implements ColorGenerator {
 

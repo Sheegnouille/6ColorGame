@@ -1,10 +1,10 @@
-package game;
+package domain;
 
 public class ConsolePrinter implements Printer {
 
     @Override
-    public void printCell(String cell) {
-        System.out.print(cell);
+    public void printText(String text) {
+        System.out.print(text);
     }
 
     @Override
