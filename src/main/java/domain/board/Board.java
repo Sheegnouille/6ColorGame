@@ -1,12 +1,11 @@
 package domain.board;
 
+import domain.IO.Display;
 import domain.color.Color;
-
-import java.util.List;
 
 public interface Board {
 
-    void show();
+    void show(Display display);
 
     void changeColor(Cell cellToChange, Color color);
 

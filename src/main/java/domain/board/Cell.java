@@ -1,5 +1,6 @@
 package domain.board;
 
+import domain.IO.Display;
 import domain.color.Color;
 
 import java.util.Objects;
@@ -38,8 +39,8 @@ public class Cell {
         return this.color == color;
     }
 
-    String showColor() {
-        return color.toString();
+    void show(Display display) {
+        display.color(color);
     }
 
     @Override

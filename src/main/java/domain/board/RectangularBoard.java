@@ -1,7 +1,6 @@
 package domain.board;
 
-import domain.ConsolePrinter;
-import domain.Printer;
+import domain.IO.Display;
 import domain.color.Color;
 import domain.color.ColorGenerator;
 
@@ -14,12 +13,10 @@ public final class RectangularBoard implements Board {
 
     private final List<Cell> cells = new ArrayList<>();
     private final Dimension dimension;
-    private final Printer printer;
     private final Queue<Cell> possibleStartingCells = new LinkedList<>();
 
-    public RectangularBoard(Dimension dimension, ColorGenerator colorGenerator, Printer printer) {
+    public RectangularBoard(Dimension dimension, ColorGenerator colorGenerator) {
         this.dimension = dimension;
-        this.printer = printer;
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Cell cellToAdd = new Cell(new Position(column, row), colorGenerator.getNextColor());
@@ -29,23 +26,22 @@ public final class RectangularBoard implements Board {
         populatePossibleStartingCell(dimension);
     }
 
-    private RectangularBoard(Dimension dimension, List<Cell> cells, Printer printer) {
+    private RectangularBoard(Dimension dimension, List<Cell> cells) {
         this.dimension = dimension;
-        this.printer = printer;
         this.cells.addAll(cells.stream().map(Cell::copyInstance).collect(Collectors.toList()));
     }
 
-    //TODO move displaying methods
-    public void show() {
+    @Override
+    public void show(Display display) {
         for (int row = 0; row < dimension.getHeight(); row++) {
             for (int column = 0; column < dimension.getWidth(); column++) {
                 Position position = new Position(column, row);
                 Cell cell = cells.get(position.transformIntoIndex(dimension));
-                printer.printText(cell.showColor());
+                cell.show(display);
             }
-            printer.returnLine();
+            display.returnLine();
         }
-        printer.returnLine();
+        display.returnLine();
     }
 
     @Override
@@ -65,7 +61,7 @@ public final class RectangularBoard implements Board {
 
     @Override
     public int determineHypotheticalTerritorySize(Cell referenceCell, Color color) {
-        RectangularBoard tempBoard = new RectangularBoard(this.dimension, this.cells, this.printer);
+        RectangularBoard tempBoard = new RectangularBoard(this.dimension, this.cells);
         Cell tempCell = Cell.copyInstance(referenceCell);
         tempBoard.changeColor(tempCell, color);
         tempCell.changeColor(color);
@@ -173,7 +169,7 @@ public final class RectangularBoard implements Board {
         }
 
         public RectangularBoard build() {
-            return new RectangularBoard(new Dimension(width, height), colorGenerator, new ConsolePrinter());
+            return new RectangularBoard(new Dimension(width, height), colorGenerator);
         }
     }
 }

@@ -1,6 +1,9 @@
 package domain.game;
 
-import domain.ConsolePrinter;
+import domain.IO.ConsoleController;
+import domain.IO.ConsoleDisplay;
+import domain.IO.Controller;
+import domain.IO.Display;
 import domain.board.Board;
 import domain.board.Dimension;
 import domain.board.RectangularBoard;
@@ -8,41 +11,50 @@ import domain.color.Color;
 import domain.color.ColorGeneratorRandom;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 
 class Runner {
-    public static void main(String[] args) {
-        Game game = initGameWithBoardDimensionFromInput();
-        addPlayersFromInput(game);
-        run(game);
+
+    private final Display display;
+    private final Controller controller;
+
+    private Runner(Display display, Controller controller) {
+        this.display = display;
+        this.controller = controller;
     }
 
-    private static void run(Game game) {
+    public static void main(String[] args) {
+        Display display = new ConsoleDisplay();
+        Controller controller = new ConsoleController();
+
+        Runner runner = new Runner(display, controller);
+
+        Game game = runner.initGameWithBoardDimensionFromInput();
+        runner.addPlayersFromInput(game);
+        runner.run(game);
+    }
+
+    private void run(Game game) {
         while (!game.isFinished()) {
-            game.showBoard();
+            game.showBoard(display);
             if (game.currentPlayerIsHuman()) {
-                askColor(game);
+                Color color = askColor(game);
+                game.currentPlayerPlays(color);
             } else {
                 game.computerPlays();
             }
         }
-        System.out.println(" ");
-        System.out.println("Game finished");
-        game.showBoard();
-        displayScores(game);
+        game.showBoard(display);
+        display.endGame(game.getScoresByPlayer());
     }
 
-    private static void addPlayersFromInput(Game game) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Set Number of players (2-4) :");
-        int requestedNumberOfPlayers = Integer.parseInt(scanner.nextLine());
+    public void addPlayersFromInput(Game game) {
+        display.textBlock("Set Number of players (2-4) :");
+        int requestedNumberOfPlayers = controller.getNumber();
 
         for (int i = 0; i < requestedNumberOfPlayers; i++) {
             int playerId = i + 1;
-            System.out.println("Player " + playerId + " name :");
-            game.addPlayer(scanner.nextLine());
+            display.textBlock("Player " + playerId + " name :");
+            game.addPlayer(controller.getPlayerName());
         }
 
         if (requestedNumberOfPlayers == 1) {
@@ -50,35 +62,22 @@ class Runner {
         }
     }
 
-    private static Game initGameWithBoardDimensionFromInput() {
-        Scanner scanner = new Scanner(System.in);
+    public Game initGameWithBoardDimensionFromInput() {
+        display.textBlock("Set Board width :");
+        int width = controller.getNumber();
 
-        System.out.println("Set Board width :");
-        int width = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Set Board height :");
-        int height = Integer.parseInt(scanner.nextLine());
+        display.textBlock("Set Board height :");
+        int height = controller.getNumber();
 
         Dimension boardDimension = new Dimension(width, height);
-        Board board = new RectangularBoard(boardDimension, new ColorGeneratorRandom(), new ConsolePrinter());
+        Board board = new RectangularBoard(boardDimension, new ColorGeneratorRandom());
         return new Game(board);
     }
 
-    private static void askColor(Game game) {
-        System.out.print(game.getCurrentPlayerName() + game.getCurrentPlayerStartingCell() +  " : Choose color (Available colors : ");
+    private Color askColor(Game game) {
         List<Color> availableColors = game.determineAvailableColors();
-        availableColors.forEach(color -> System.out.print(color.toString()));
-        System.out.println(")");
 
-        Scanner scanner = new Scanner(System.in);
-        String chosenColor = scanner.nextLine().toUpperCase();
-        if (!Color.exists(chosenColor) || !game.currentPlayerChooseColor(Color.valueOf(chosenColor))) {
-            System.out.println("Color not available");
-        }
-    }
-
-    private static void displayScores(Game game) {
-        Map<Player, Integer> scoresByPlayer = game.getScoresByPlayer();
-        scoresByPlayer.keySet().forEach(player -> System.out.println(player + "Score : " + scoresByPlayer.get(player)));
+        display.promptPlayerForColor(game.getCurrentPlayerName(), availableColors);
+        return controller.getColorInput(availableColors);
     }
 }

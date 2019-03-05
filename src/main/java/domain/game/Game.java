@@ -1,5 +1,6 @@
 package domain.game;
 
+import domain.IO.Display;
 import domain.board.Board;
 import domain.board.Cell;
 import domain.color.Color;
@@ -17,8 +18,8 @@ public class Game {
         this.board = board;
     }
 
-    void showBoard() {
-        board.show();
+    void showBoard(Display display) {
+        board.show(display);
     }
 
     Map<Player, Integer> getScoresByPlayer() {
@@ -41,6 +42,7 @@ public class Game {
         players.add(player);
     }
 
+    @Deprecated
     public boolean currentPlayerChooseColor(Color color) {
         if (!isColorAvailable(color))
             return false;
@@ -63,7 +65,7 @@ public class Game {
         return !sameColorCell.isPresent();
     }
 
-    private void currentPlayerPlays(Color color) {
+    void currentPlayerPlays(Color color) {
         board.changeColor(getCurrentPlayerStartingCell(), color);
         if (!isFinished()) {
             nextPlayer();
