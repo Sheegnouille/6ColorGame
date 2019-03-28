@@ -36,12 +36,13 @@ class Runner {
     private void run(Game game) {
         while (!game.isFinished()) {
             game.showBoard(display);
+            Color color;
             if (game.currentPlayerIsHuman()) {
-                Color color = askColor(game);
-                game.currentPlayerPlays(color);
+                color = askColor(game);
             } else {
-                game.computerPlays();
+                color = game.computerPlays();
             }
+            game.currentPlayerPlays(color);
         }
         game.showBoard(display);
         display.endGame(game.getScoresByPlayer());

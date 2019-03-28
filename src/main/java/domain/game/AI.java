@@ -47,7 +47,8 @@ public class AI {
         return determineColorToPlayGreedy(board, board.getFirstCell(), possibleColors);
     }
 
-    static Color determineColorToPlaySmart(Board board, Cell referenceCell, List<Color> possibleColors) {
+    static Color
+    determineColorToPlaySmart(Board board, Cell referenceCell, List<Color> possibleColors) {
         int baseTerritorySize = board.determineTerritorySizeFromCell(referenceCell);
 
         Color greedyColor = determineColorToPlayGreedy(board, referenceCell, possibleColors);

@@ -72,9 +72,8 @@ public class Game {
         }
     }
 
-    void computerPlays() {
-        Color color = AI.determineColorToPlaySmart(board, getCurrentPlayerStartingCell(), determineAvailableColors());
-        currentPlayerPlays(color);
+    Color computerPlays() {
+        return AI.determineColorToPlaySmart(board, getCurrentPlayerStartingCell(), determineAvailableColors());
     }
 
     private void nextPlayer() {
@@ -88,11 +87,7 @@ public class Game {
     }
 
     boolean isPlayerInGame(String playerName) {
-        for (Player player : players) {
-            if (playerName.equals(player.getName()))
-                return true;
-        }
-        return false;
+        return players.stream().anyMatch(player -> playerName.equals(player.getName()));
     }
 
     Cell getCurrentPlayerStartingCell() {

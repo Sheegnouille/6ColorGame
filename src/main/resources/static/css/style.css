@@ -1,0 +1,36 @@
+.foo {
+  float: left;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.row {
+  clear: both;
+}
+
+.blue {
+  background: #1A1AFF;
+}
+
+.purple {
+  background: #8C1AFF;
+}
+
+.red {
+  background: #FF1A1A;
+}
+
+.green {
+  background: #1AFF1A;
+}
+
+.yellow {
+  background: #FFFF1A;
+}
+
+.orange {
+  background: #FF8C1A;
+}
+
+.cyan {
+  background: #1AFFFF;
+}
